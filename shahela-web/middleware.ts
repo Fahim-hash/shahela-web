@@ -1,15 +1,21 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  // IP Address বের করা
-  const ip = request.ip || request.headers.get('x-forwarded-for') || 'Unknown IP';
+  // request.ip সরাসরি টাইপ এরর দিলে হেডার থেকে বের করা ভালো
+  const forwarded = request.headers.get('x-forwarded-for');
   
-  // Vercel Console/Log এ প্রিন্ট করা
+  // যদি একাধিক আইপি থাকে (প্রক্সির কারণে), প্রথমটি নেওয়া হয়
+  const ip = forwarded ? forwarded.split(',')[0] : '127.0.0.1';
+
   console.log(`--- New Visitor ---`);
   console.log(`IP: ${ip}`);
   console.log(`Path: ${request.nextUrl.pathname}`);
-  console.log(`Device: ${request.headers.get('user-agent')}`);
-  
+
   return NextResponse.next();
 }
+
+// শুধু পেজগুলোর জন্য রান হবে (Static assets ইগনোর করবে)
+export const config = {
+  matcher: '/((?!api|_next/static|_next/image|favicon.ico).*)',
+};
