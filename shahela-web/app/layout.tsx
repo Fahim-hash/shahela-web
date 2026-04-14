@@ -1,4 +1,5 @@
 import { EB_Garamond, Inter } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const ebGaramond = EB_Garamond({ subsets: ["latin"], variable: "--font-serif" });
@@ -9,6 +10,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={`${ebGaramond.variable} ${inter.variable} font-sans`}>
         {children}
+        <Analytics />
       </body>
     </html>
   );

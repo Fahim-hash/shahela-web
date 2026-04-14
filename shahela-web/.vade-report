@@ -1,0 +1,64 @@
+# Vercel Web Analytics Installation Report
+
+## Summary
+Successfully installed and configured Vercel Web Analytics for the shahela-web Next.js project following the latest official Vercel documentation.
+
+## Changes Made
+
+### 1. Package Installation
+- **Package**: `@vercel/analytics` (version 1.5.0)
+- **Method**: npm install
+- **Lock file**: Updated package-lock.json accordingly
+
+### 2. Code Changes
+**Modified File**: `app/layout.tsx`
+
+Added the following:
+- Import statement: `import { Analytics } from "@vercel/analytics/next";`
+- Component placement: `<Analytics />` added within the body element, after the children component
+
+## Implementation Details
+
+### Framework Detection
+- **Framework**: Next.js 16.2.3 (App Router)
+- **Language**: TypeScript
+- **Package Manager**: npm
+
+### Integration Method
+Following the official Vercel documentation for Next.js App Router projects:
+1. Fetched latest installation instructions from https://vercel.com/docs/analytics/quickstart
+2. Installed the `@vercel/analytics` package
+3. Imported the Analytics component from `@vercel/analytics/next`
+4. Added the `<Analytics />` component in the root layout file within the body element
+
+### Code Structure Preservation
+- Maintained existing font configurations (EB Garamond and Inter)
+- Preserved the existing layout structure and styling
+- Added Analytics component non-intrusively after the children prop
+- No breaking changes to existing functionality
+
+## Verification Steps Completed
+
+✅ **Build Verification**: Successfully ran `npm run build` - all pages compiled without errors
+✅ **Linting**: Ran ESLint - no new errors introduced by the Analytics integration
+✅ **Type Safety**: TypeScript compilation passed with no errors
+✅ **Lock File**: package-lock.json updated with new dependency tree
+
+## Next Steps
+
+Once deployed to Vercel:
+1. Enable Analytics in the Vercel project dashboard (Analytics tab → Enable button)
+2. Deploy the application to activate the analytics endpoints
+3. Verify tracking is active by checking for `/_vercel/insights/*` requests in the browser's Network tab
+4. Monitor analytics data in the Vercel dashboard
+
+## Files Modified
+- `app/layout.tsx` - Added Analytics import and component
+- `package.json` - Added @vercel/analytics dependency
+- `package-lock.json` - Updated with new dependency tree
+
+## Notes
+- The Analytics component is lightweight and only loads when the app is deployed on Vercel
+- No configuration is needed for basic web analytics
+- Custom events and advanced features can be added later as needed
+- The implementation follows Next.js App Router best practices by placing the component in the root layout
