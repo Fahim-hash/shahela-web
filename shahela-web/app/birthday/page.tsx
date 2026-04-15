@@ -1,116 +1,114 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Heart, Sparkles, Star } from "lucide-react";
+import { Sparkles, Heart } from "lucide-react";
 
-/** * SHAHELA'S BIRTHDAY - THE DEFINITIVE EDITION
- * Correct Date: 25th November 2008
- * Design Style: Artistic Portrait / Minimal Luxe
+/** * SHAHELA'S BIRTHDAY - THE ATTRACTION EDITION
+ * Concept: Royal Crimson & Gold Magic
+ * Built by: RelaxStudio (2026)
  */
 
-export default function FinalBirthdayPage() {
+export default function AttractiveWishPage() {
   return (
-    <div className="relative min-h-[100dvh] w-full bg-[#030303] text-white flex flex-col items-center overflow-x-hidden selection:bg-rose-500/30">
+    <div className="relative min-h-[100dvh] w-full bg-[#050002] flex items-center justify-center overflow-hidden font-sans">
       
-      {/* 🌌 Atmospheric Backdrop */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[100%] h-[50%] bg-rose-900/10 blur-[150px] rounded-full"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[100%] h-[50%] bg-amber-900/5 blur-[120px] rounded-full"></div>
-        <div className="absolute inset-0 opacity-[0.02] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
+      {/* 🌌 Magical Background Animations */}
+      <div className="fixed inset-0 z-0 flex items-center justify-center pointer-events-none">
+        {/* Spinning Ambient Glow */}
+        <motion.div 
+          animate={{ rotate: 360 }}
+          transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
+          className="absolute w-[150vw] h-[150vw] md:w-[80vw] md:h-[80vw] bg-gradient-to-tr from-rose-900/20 via-amber-900/10 to-transparent blur-[100px] rounded-full"
+        />
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-[50px]"></div>
+        <div className="absolute inset-0 opacity-[0.04] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay"></div>
       </div>
 
-      <main className="relative z-10 w-full max-w-[1200px] flex flex-col items-center px-6 py-12 md:py-24">
+      <main className="relative z-10 w-full max-w-5xl px-5 py-10 flex flex-col md:flex-row items-center justify-center gap-10 md:gap-20">
         
-        {/* --- Section 1: The Portrait --- */}
+        {/* 📸 The Hero Portrait - Majestic Frame */}
         <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.5, ease: [0.19, 1, 0.22, 1] }}
-          className="relative w-full max-w-[360px] md:max-w-[480px] aspect-[3/4] group"
+          initial={{ opacity: 0, scale: 0.8, filter: "blur(10px)" }}
+          animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          className="relative w-full max-w-[320px] md:max-w-[400px] aspect-[4/5] shrink-0"
         >
-          {/* Glowing Aura behind the image */}
-          <div className="absolute -inset-2 bg-gradient-to-tr from-rose-600/20 to-transparent blur-2xl rounded-[60px] group-hover:opacity-100 transition-opacity opacity-50"></div>
+          {/* Animated Golden/Rose Border */}
+          <div className="absolute -inset-[2px] rounded-[2.5rem] bg-gradient-to-b from-amber-300 via-rose-500 to-transparent opacity-50 blur-[2px]"></div>
           
-          <div className="relative h-full w-full rounded-[50px] md:rounded-[80px] overflow-hidden border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.8)]">
+          <div className="relative h-full w-full rounded-[2.5rem] overflow-hidden bg-black shadow-[0_0_50px_rgba(225,29,72,0.3)]">
             <img 
               src="/images/shahela1.jpg" 
-              alt="Shahela" 
-              className="w-full h-full object-cover grayscale-[10%] group-hover:grayscale-0 transition-all duration-1000"
+              alt="Shahela Apu" 
+              className="w-full h-full object-cover opacity-90 hover:opacity-100 transition-all duration-700 hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-            
-            {/* Overlay Text on Image */}
-            <div className="absolute bottom-10 left-10">
-              <span className="text-[10px] tracking-[0.5em] font-bold text-rose-500 uppercase block mb-1">Born In</span>
-              <h3 className="text-2xl font-black italic tracking-tighter">25 NOV 2008</h3>
-            </div>
+            {/* Elegant Inner Shadow */}
+            <div className="absolute inset-0 border border-white/20 rounded-[2.5rem] pointer-events-none mix-blend-overlay"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-[#050002] via-transparent to-transparent opacity-80"></div>
           </div>
 
-          {/* Floating Star Icon */}
+          {/* Floating Date Badge */}
           <motion.div 
-            animate={{ rotate: 360 }}
-            transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
-            className="absolute -top-6 -right-6 bg-white/5 backdrop-blur-md border border-white/10 p-4 rounded-full"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 1, duration: 0.8 }}
+            className="absolute bottom-8 -left-4 md:-left-8 bg-white/10 backdrop-blur-xl border border-white/20 px-6 py-3 rounded-2xl shadow-xl flex items-center gap-3"
           >
-            <Star className="text-amber-400" size={24} fill="currentColor" />
+            <Sparkles className="text-amber-300" size={18} />
+            <div>
+              <span className="block text-[8px] text-white/50 tracking-[0.3em] uppercase">Est.</span>
+              <span className="block text-sm font-black tracking-widest text-white">25 NOV 2008</span>
+            </div>
           </motion.div>
         </motion.div>
 
-        {/* --- Section 2: The Typography --- */}
-        <div className="mt-16 text-center max-w-2xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 1 }}
-          >
-            <h1 className="text-6xl md:text-[120px] font-black italic tracking-tighter leading-[0.8] mb-10 text-transparent bg-clip-text bg-gradient-to-b from-white to-white/30 uppercase">
-              Shahela.
-            </h1>
+        {/* 💌 The Enchanting Message */}
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 1.2 }}
+          className="w-full text-center md:text-left flex flex-col items-center md:items-start"
+        >
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-rose-500/30 bg-rose-500/10 text-rose-300 text-[10px] font-bold tracking-[0.5em] uppercase mb-6">
+            A Special Day
+          </div>
 
-            {/* --- The Wish Card (Mobile Optimized) --- */}
-            <div className="relative p-10 bg-white/[0.02] border border-white/5 rounded-[40px] backdrop-blur-3xl shadow-2xl">
-              <div className="flex justify-center mb-8 gap-2">
-                {[...Array(3)].map((_, i) => (
-                  <Sparkles key={i} size={14} className="text-rose-500/40" />
-                ))}
-              </div>
+          <h1 className="text-6xl md:text-[90px] font-black italic tracking-tighter leading-[0.85] mb-6 text-white drop-shadow-2xl">
+            Happy <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-rose-400 to-rose-600">
+              Birthday
+            </span>
+          </h1>
+          
+          <h2 className="text-3xl md:text-5xl font-bold tracking-widest text-white/90 mb-10 uppercase">
+            Shahela
+          </h2>
 
-              <p className="font-['Noto_Serif_Bengali'] text-xl md:text-3xl text-white/90 leading-relaxed italic mb-8 font-light">
-                "আকাশের নক্ষত্ররা আজ তোমার হাসির প্রেমে পড়ুক।"
-              </p>
+          <div className="relative max-w-md w-full">
+            {/* Quote Icon styling */}
+            <span className="absolute -top-8 -left-4 text-6xl text-rose-500/20 font-serif italic">"</span>
+            <p className="font-['Noto_Serif_Bengali'] text-xl md:text-2xl text-white/90 leading-relaxed italic mb-6 font-light relative z-10">
+              আকাশের সবটুকু নীল আর বসন্তের সবটুকু স্নিগ্ধতা যেন তোমার হাসিতে মিশে থাকে।
+            </p>
+            <p className="font-['Noto_Serif_Bengali'] text-sm md:text-base text-white/50 leading-relaxed font-light">
+              শুভ জন্মদিন শাহেলা আপু! আজকের এই বিশেষ দিনে তোমার জন্য অনেক অনেক দোয়া ও শুভকামনা। জীবন হোক আনন্দের এক মহাকাব্য।
+            </p>
+          </div>
 
-              <div className="h-px w-20 bg-rose-600/30 mx-auto mb-8"></div>
-
-              <p className="font-['Noto_Serif_Bengali'] text-sm md:text-lg text-white/40 leading-relaxed max-w-md mx-auto">
-                শুভ জন্মদিন শাহেলা আপু! ২০০৮ সালের এই দিনটি ছিল পৃথিবীর জন্য এক উপহার। তোমার প্রতিটি স্বপ্ন যেন সার্থকতা পায়। 
-              </p>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* --- Section 3: Signature --- */}
-        <footer className="mt-24 flex flex-col items-center">
-          <motion.div 
-            animate={{ scale: [1, 1.1, 1] }} 
-            transition={{ repeat: Infinity, duration: 3 }}
-            className="mb-6 cursor-pointer"
-          >
-            <Heart size={32} className="text-rose-600" fill="currentColor" />
-          </motion.div>
-          <p className="text-[10px] tracking-[1em] text-white/10 uppercase font-black">RelaxStudio</p>
-        </footer >
+          <div className="mt-12 flex items-center gap-4">
+            <Heart className="text-rose-500 animate-pulse" size={20} fill="currentColor" />
+            <div className="h-[1px] w-16 bg-gradient-to-r from-rose-500/50 to-transparent"></div>
+            <p className="text-[10px] tracking-[0.4em] font-bold uppercase text-white/30">
+              RelaxStudio Production
+            </p>
+          </div>
+        </motion.div>
 
       </main>
 
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@300;400;700&display=swap');
-        ::-webkit-scrollbar { display: none; }
-        body { 
-          background: #030303; 
-          margin: 0;
-          padding: 0;
-          overflow-x: hidden;
-        }
+        body { background: #050002; margin: 0; padding: 0; overflow-x: hidden; }
       `}</style>
     </div>
   );
