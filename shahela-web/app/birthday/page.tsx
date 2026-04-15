@@ -1,140 +1,105 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Heart, Sparkles, Star, ChevronDown } from "lucide-react";
+import { Heart, Sparkles, Star } from "lucide-react";
 
-/** * SHAHELA'S BIRTHDAY - IMMERSIVE CANVAS EDITION
- * No Grids. No Albums. Just pure Full-Screen Visuals.
+/** * SHAHELA'S BIRTHDAY - THE EXCLUSIVE WISH PAGE
+ * Focused on a single masterpiece image.
  * Built by: RelaxStudio (2026)
  */
 
-const FullScreenSlide = ({ src, title, sub, delay = 0 }: { src: string; title: string; sub: string; delay?: number }) => (
-  <section className="relative h-[100dvh] w-full overflow-hidden snap-start">
-    <motion.div 
-      initial={{ scale: 1.2, opacity: 0 }}
-      whileInView={{ scale: 1, opacity: 1 }}
-      transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-      className="absolute inset-0"
-    >
-      <img src={src} className="w-full h-full object-cover" alt={title} />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/90" />
-    </motion.div>
-
-    <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-24 pb-32">
-      <motion.div
-        initial={{ y: 50, opacity: 0 }}
-        whileInView={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.5, duration: 1 }}
-      >
-        <span className="text-rose-500 font-black text-[10px] tracking-[0.8em] uppercase mb-4 block">
-          Visual Verse
-        </span>
-        <h2 className="text-5xl md:text-[120px] font-black italic tracking-tighter text-white leading-[0.85] mb-8 uppercase">
-          {title}
-        </h2>
-        <p className="font-['Noto_Serif_Bengali'] text-xl md:text-3xl text-white/50 max-w-2xl font-light italic border-l-2 border-rose-600/30 pl-6">
-          {sub}
-        </p>
-      </motion.div>
-    </div>
-  </section>
-);
-
-export default function ImmersiveBirthday() {
+export default function SingleImageWishPage() {
   return (
-    <div className="bg-black text-white h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth no-scrollbar">
+    <div className="relative h-screen w-full bg-[#050505] text-white overflow-hidden flex items-center justify-center font-serif">
       
-      {/* 🎭 Scene 1: The Intro (Hero) */}
-      <section className="relative h-[100dvh] w-full flex items-center justify-center snap-start overflow-hidden">
-        <div className="absolute inset-0">
-          <img src="/images/shahela1.jpg" className="w-full h-full object-cover opacity-40 blur-[2px]" />
-          <div className="absolute inset-0 bg-black/60" />
-        </div>
+      {/* 🎭 Background Effects */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-rose-900/10 blur-[120px] rounded-full"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-rose-800/5 blur-[100px] rounded-full"></div>
+        {/* Subtle Noise Texture */}
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
+      </div>
 
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 2 }}
-          className="relative z-10 text-center px-6"
-        >
-          <div className="flex justify-center mb-10">
-             <div className="p-1 rounded-full bg-gradient-to-r from-rose-600 to-amber-500">
-                {/* তোমার সেই রিফায়েন্স ইমেজটি এখানে বসাতে পারো */}
-                <div className="w-32 h-32 md:w-48 md:h-48 rounded-full overflow-hidden border-4 border-black">
-                   <img src="/images/shahela5.png" className="w-full h-full object-cover" />
-                </div>
-             </div>
-          </div>
-          <h1 className="text-[18vw] md:text-[14vw] font-black italic tracking-tighter leading-none mix-blend-screen mb-4">
-            SHAH<span className="text-rose-600">ELA</span>
-          </h1>
-          <p className="text-[10px] md:text-xs tracking-[1.5em] uppercase text-white/30 ml-[1.5em]">Birthday Experience • 2026</p>
-        </motion.div>
-
-        <motion.div 
-          animate={{ y: [0, 10, 0] }} 
-          transition={{ repeat: Infinity, duration: 2 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white/20 flex flex-col items-center gap-2"
-        >
-          <span className="text-[8px] uppercase tracking-widest font-black">Scroll Down</span>
-          <ChevronDown size={20} />
-        </motion.div>
-      </section>
-
-      {/* 📽️ Scene 2: The Muse */}
-      <FullScreenSlide 
-        src="/images/shahela2.jpg" 
-        title="Noir Magic" 
-        sub="দৃষ্টির সীমানায় যখন শুধু মায়া খেলা করে।" 
-      />
-
-      {/* 📽️ Scene 3: The Aura */}
-      <FullScreenSlide 
-        src="/images/shahela3.jpg" 
-        title="Pure Spirit" 
-        sub="স্নিগ্ধতা যখন গল্পের প্রতিটি অক্ষরে মিশে যায়।" 
-      />
-
-      {/* 📽️ Scene 4: The Archive (Ref: image_ca4b27) */}
-      <FullScreenSlide 
-        src="/images/shahela4.jpg" 
-        title="Eternal Flow" 
-        sub="সময়ের স্রোতে ভাসমান কিছু অমলিন স্মৃতি।" 
-      />
-
-      {/* 💌 Scene 5: The Final Wish */}
-      <section className="relative h-[100dvh] w-full flex items-center justify-center snap-start bg-[#050505]">
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-rose-900/10 via-transparent to-transparent opacity-50" />
+      <main className="relative z-10 w-full max-w-6xl px-6 grid md:grid-cols-2 gap-12 md:gap-20 items-center">
         
+        {/* 📸 The Only Hero Image (Image #1) */}
         <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          className="text-center px-8 relative z-10"
+          initial={{ opacity: 0, scale: 0.9, x: -50 }}
+          animate={{ opacity: 1, scale: 1, x: 0 }}
+          transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+          className="relative group"
         >
-          <Heart className="mx-auto text-rose-600 mb-12 animate-pulse" size={50} fill="currentColor" />
-          <h2 className="text-4xl md:text-6xl font-black italic tracking-tighter mb-12 uppercase">Keep Smiling, <br/> Shahela Apu.</h2>
+          {/* Decorative Frame */}
+          <div className="absolute -inset-4 border border-rose-600/20 rounded-[40px] md:rounded-[60px] pointer-events-none"></div>
           
-          <div className="font-['Noto_Serif_Bengali'] text-xl md:text-3xl font-light italic text-white/60 max-w-3xl leading-relaxed">
-            "আজকের এই বিশেষ ক্ষণে আমাদের একটাই চাওয়া—তোমার হাসিটা যেন এভাবেই চিরকাল অমলিন থাকে। শুভ জন্মদিন!"
+          <div className="relative aspect-[4/5] md:aspect-[3/4] overflow-hidden rounded-[30px] md:rounded-[50px] shadow-2xl border border-white/10">
+            <img 
+              src="/images/shahela1.jpg" 
+              alt="Shahela Apu" 
+              className="w-full h-full object-cover transition-transform duration-[3s] group-hover:scale-105"
+            />
+            {/* Soft Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
           </div>
-          
-          <div className="mt-20">
-             <p className="text-[10px] tracking-[1em] uppercase text-rose-500 font-bold">RelaxStudio Production</p>
-          </div>
+
+          {/* Floating Element */}
+          <motion.div 
+            animate={{ y: [0, -15, 0] }}
+            transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+            className="absolute -bottom-6 -right-6 bg-zinc-950/80 backdrop-blur-xl border border-white/10 p-6 rounded-3xl shadow-2xl hidden md:block"
+          >
+            <Sparkles className="text-rose-500 mb-2" size={20} />
+            <div className="text-[10px] font-black tracking-widest uppercase text-white/40">Exclusive Moment</div>
+          </motion.div>
         </motion.div>
-      </section>
+
+        {/* 💌 The Wish Content */}
+        <div className="flex flex-col text-center md:text-left">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 1 }}
+          >
+            <div className="flex items-center justify-center md:justify-start gap-4 mb-8">
+              <div className="h-px w-8 bg-rose-600"></div>
+              <span className="text-rose-500 font-black text-[10px] tracking-[0.6em] uppercase">03 March 2026</span>
+            </div>
+
+            <h1 className="text-6xl md:text-[100px] font-black italic tracking-tighter leading-[0.85] mb-10 text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40">
+              HAPPY. <br /> BIRTHDAY. <br /> <span className="text-rose-600">SHAHELA</span>
+            </h1>
+
+            <div className="space-y-6 font-['Noto_Serif_Bengali']">
+              <p className="text-xl md:text-3xl text-white/80 leading-relaxed italic font-light">
+                "আকাশের সবটুকু নীল আর বসন্তের সবটুকু স্নিগ্ধতা যেন তোমার হাসিতে মিশে থাকে।"
+              </p>
+              
+              <div className="pt-8">
+                <p className="text-lg md:text-xl text-white/40 font-light leading-loose">
+                  শুভ জন্মদিন শাহেলা আপু! আজকের এই বিশেষ দিনে তোমার জন্য অনেক অনেক দোয়া ও শুভকামনা। রিল্যাক্সস্টুডিওর পক্ষ থেকে তোমাকে জানাই বিনম্র শ্রদ্ধা আর ভালোবাসা। জীবন হোক আনন্দের এক মহাকাব্য।
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-12 flex items-center justify-center md:justify-start gap-6">
+              <Heart className="text-rose-600 animate-pulse" size={24} fill="currentColor" />
+              <div className="h-px w-24 bg-white/10"></div>
+              <p className="text-[10px] tracking-[0.3em] font-black uppercase text-white/20">RelaxStudio Production</p>
+            </div>
+          </motion.div>
+        </div>
+      </main>
+
+      {/* 📜 Signature Footer */}
+      <footer className="absolute bottom-10 left-0 w-full text-center opacity-10 pointer-events-none">
+        <div className="text-[8vw] font-black italic tracking-tighter uppercase leading-none">Celebrating A Muse</div>
+      </footer>
 
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@300;400;700&display=swap');
         
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
-        body { 
-          background: black;
-          margin: 0;
-          padding: 0;
-        }
+        ::-webkit-scrollbar { display: none; }
+        body { background: #050505; }
       `}</style>
     </div>
   );
