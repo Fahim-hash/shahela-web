@@ -1,115 +1,112 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Heart, Sparkles, Star, Crown } from "lucide-react";
+import { Heart, Sparkles, Star } from "lucide-react";
 
-/** * SHAHELA'S BIRTHDAY - ULTIMATE MOBILE RESPONSIVE
- * Focused on Single Masterpiece | Zero Mess | Luxury Feel
- * Built by: RelaxStudio (2026)
+/** * SHAHELA'S BIRTHDAY - THE DEFINITIVE EDITION
+ * Correct Date: 25th November 2008
+ * Design Style: Artistic Portrait / Minimal Luxe
  */
 
-export default function PerfectBirthdayPage() {
+export default function FinalBirthdayPage() {
   return (
-    <div className="relative min-h-screen w-full bg-[#050505] text-white flex flex-col font-sans overflow-x-hidden">
+    <div className="relative min-h-[100dvh] w-full bg-[#030303] text-white flex flex-col items-center overflow-x-hidden selection:bg-rose-500/30">
       
-      {/* 🌌 Ambient Background Glows */}
+      {/* 🌌 Atmospheric Backdrop */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute top-[-10%] left-[-20%] w-[100%] h-[50%] bg-rose-900/10 blur-[120px] rounded-full"></div>
-        <div className="absolute bottom-[-10%] right-[-20%] w-[100%] h-[50%] bg-rose-800/5 blur-[100px] rounded-full"></div>
+        <div className="absolute top-[-10%] left-[-10%] w-[100%] h-[50%] bg-rose-900/10 blur-[150px] rounded-full"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[100%] h-[50%] bg-amber-900/5 blur-[120px] rounded-full"></div>
+        <div className="absolute inset-0 opacity-[0.02] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
       </div>
 
-      <main className="relative z-10 flex flex-col items-center w-full px-5 py-10 md:py-20 max-w-4xl mx-auto">
+      <main className="relative z-10 w-full max-w-[1200px] flex flex-col items-center px-6 py-12 md:py-24">
         
-        {/* 👑 Top Badge */}
+        {/* --- Section 1: The Portrait --- */}
         <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col items-center mb-10"
-        >
-          <Crown className="text-amber-400 mb-2" size={24} />
-          <span className="text-[10px] tracking-[0.6em] font-black uppercase text-rose-500">The Queen of 3rd March</span>
-        </motion.div>
-
-        {/* 📸 The Hero Image - Perfectly Responsive */}
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }}
+          initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
-          className="relative w-full max-w-[340px] md:max-w-[450px] aspect-[4/5] z-20"
+          transition={{ duration: 1.5, ease: [0.19, 1, 0.22, 1] }}
+          className="relative w-full max-w-[360px] md:max-w-[480px] aspect-[3/4] group"
         >
-          {/* Animated Glow Border */}
-          <div className="absolute -inset-1 bg-gradient-to-tr from-rose-600 to-amber-500 rounded-[45px] md:rounded-[65px] blur-sm opacity-30 animate-pulse"></div>
+          {/* Glowing Aura behind the image */}
+          <div className="absolute -inset-2 bg-gradient-to-tr from-rose-600/20 to-transparent blur-2xl rounded-[60px] group-hover:opacity-100 transition-opacity opacity-50"></div>
           
-          <div className="relative h-full w-full rounded-[40px] md:rounded-[60px] overflow-hidden border border-white/10 shadow-2xl">
+          <div className="relative h-full w-full rounded-[50px] md:rounded-[80px] overflow-hidden border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.8)]">
             <img 
               src="/images/shahela1.jpg" 
-              alt="Shahela Apu" 
-              className="w-full h-full object-cover"
+              alt="Shahela" 
+              className="w-full h-full object-cover grayscale-[10%] group-hover:grayscale-0 transition-all duration-1000"
             />
-            {/* Soft Shadow Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+            
+            {/* Overlay Text on Image */}
+            <div className="absolute bottom-10 left-10">
+              <span className="text-[10px] tracking-[0.5em] font-bold text-rose-500 uppercase block mb-1">Born In</span>
+              <h3 className="text-2xl font-black italic tracking-tighter">25 NOV 2008</h3>
+            </div>
           </div>
 
-          {/* Floating Sparkle Icon */}
+          {/* Floating Star Icon */}
           <motion.div 
             animate={{ rotate: 360 }}
-            transition={{ repeat: Infinity, duration: 8, ease: "linear" }}
-            className="absolute -top-4 -right-4 bg-zinc-900 border border-white/20 p-3 rounded-2xl shadow-xl"
+            transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
+            className="absolute -top-6 -right-6 bg-white/5 backdrop-blur-md border border-white/10 p-4 rounded-full"
           >
-            <Sparkles className="text-amber-400" size={20} />
+            <Star className="text-amber-400" size={24} fill="currentColor" />
           </motion.div>
         </motion.div>
 
-        {/* 💌 The Content Card - Mobile Balanced */}
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 1 }}
-          className="mt-12 w-full text-center"
-        >
-          {/* Happy Birthday Text */}
-          <h1 className="text-5xl md:text-8xl font-black italic tracking-tighter leading-none mb-6">
-            HAPPY <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-rose-700 uppercase">Birthday</span>
-          </h1>
-          
-          <h2 className="text-2xl md:text-4xl font-bold tracking-[0.2em] uppercase text-white/90 mb-8">
-            SHAHELA
-          </h2>
+        {/* --- Section 2: The Typography --- */}
+        <div className="mt-16 text-center max-w-2xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 1 }}
+          >
+            <h1 className="text-6xl md:text-[120px] font-black italic tracking-tighter leading-[0.8] mb-10 text-transparent bg-clip-text bg-gradient-to-b from-white to-white/30 uppercase">
+              Shahela.
+            </h1>
 
-          {/* Bengali Wish - Clean & Readable */}
-          <div className="bg-white/[0.03] border border-white/5 backdrop-blur-xl p-8 rounded-[35px] md:rounded-[50px] shadow-inner relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-rose-600 to-transparent"></div>
-            
-            <p className="font-['Noto_Serif_Bengali'] text-lg md:text-2xl text-white/80 leading-relaxed italic mb-6">
-              "আকাশের সবটুকু নীল আর বসন্তের সবটুকু স্নিগ্ধতা যেন তোমার হাসিতে মিশে থাকে।"
-            </p>
-            
-            <p className="font-['Noto_Serif_Bengali'] text-sm md:text-lg text-white/40 leading-relaxed">
-              শুভ জন্মদিন শাহেলা আপু! আজকের এই বিশেষ দিনে তোমার জন্য অনেক অনেক দোয়া ও শুভকামনা। রিল্যাক্সস্টুডিওর পক্ষ থেকে শ্রদ্ধা ও ভালোবাসা।
-            </p>
-          </div>
+            {/* --- The Wish Card (Mobile Optimized) --- */}
+            <div className="relative p-10 bg-white/[0.02] border border-white/5 rounded-[40px] backdrop-blur-3xl shadow-2xl">
+              <div className="flex justify-center mb-8 gap-2">
+                {[...Array(3)].map((_, i) => (
+                  <Sparkles key={i} size={14} className="text-rose-500/40" />
+                ))}
+              </div>
 
-          {/* Footer Heart Animation */}
-          <div className="mt-12 flex flex-col items-center gap-4">
-            <motion.div
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ repeat: Infinity, duration: 2 }}
-            >
-              <Heart className="text-rose-600" size={32} fill="currentColor" />
-            </motion.div>
-            <div className="h-px w-20 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-            <p className="text-[9px] tracking-[0.5em] font-black uppercase text-white/20">RelaxStudio Production</p>
-          </div>
-        </motion.div>
+              <p className="font-['Noto_Serif_Bengali'] text-xl md:text-3xl text-white/90 leading-relaxed italic mb-8 font-light">
+                "আকাশের নক্ষত্ররা আজ তোমার হাসির প্রেমে পড়ুক।"
+              </p>
+
+              <div className="h-px w-20 bg-rose-600/30 mx-auto mb-8"></div>
+
+              <p className="font-['Noto_Serif_Bengali'] text-sm md:text-lg text-white/40 leading-relaxed max-w-md mx-auto">
+                শুভ জন্মদিন শাহেলা আপু! ২০০৮ সালের এই দিনটি ছিল পৃথিবীর জন্য এক উপহার। তোমার প্রতিটি স্বপ্ন যেন সার্থকতা পায়। 
+              </p>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* --- Section 3: Signature --- */}
+        <footer className="mt-24 flex flex-col items-center">
+          <motion.div 
+            animate={{ scale: [1, 1.1, 1] }} 
+            transition={{ repeat: Infinity, duration: 3 }}
+            className="mb-6 cursor-pointer"
+          >
+            <Heart size={32} className="text-rose-600" fill="currentColor" />
+          </motion.div>
+          <p className="text-[10px] tracking-[1em] text-white/10 uppercase font-black">RelaxStudio</p>
+        </footer >
 
       </main>
 
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@300;400;700&display=swap');
-        
         ::-webkit-scrollbar { display: none; }
         body { 
-          background: #050505; 
+          background: #030303; 
           margin: 0;
           padding: 0;
           overflow-x: hidden;
