@@ -1,211 +1,211 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
-export default function PookiePetniWebsite() {
-  // States
+/**
+ * 🧸 POOKIE UNIVERSE - SOFT PASTEL EDITION
+ * Built by: RelaxStudio (2026)
+ * Theme: Soft Pink / Pastel Cloud / Minimalist Interactive
+ */
+
+// --- Sub-Components ---
+
+function FloatingHeart({ delay = 0, left = "10%" }) {
+  return (
+    <motion.div
+      initial={{ y: "100vh", opacity: 0, scale: 0.5 }}
+      animate={{ y: "-10vh", opacity: [0, 1, 1, 0], scale: [0.5, 1, 1, 0.7] }}
+      transition={{ duration: 8, repeat: Infinity, delay: delay, ease: "linear" }}
+      className="fixed text-2xl z-0 pointer-events-none"
+      style={{ left }}
+    >
+      🌸
+    </motion.div>
+  );
+}
+
+export default function PookieUniverse() {
+  const [mounted, setMounted] = useState(false);
   const [isPetni, setIsPetni] = useState(false);
-  const [meterValue, setMeterValue] = useState(20);
-  const [compliment, setCompliment] = useState("Reveal the truth below! ✨");
+  const [clickCount, setClickCount] = useState(0);
+  const [pookieQuote, setPookieQuote] = useState("Click the magic star below for sweet words! ✨");
 
-  // Bandhubi r real image URL placeholder
-  // NOTE: REPLACE THESE URLs WITH ACTUAL IMAGE URLs OF YOUR FRIEND.
-  const bandhubiImages = {
-    pookie: "https://via.placeholder.com/600x800.png?text=Cute+Bandhubi+Pic", // Upload her cute pic and put link here
-    petni: "https://via.placeholder.com/600x800/2a1040/cc99ff.png?text=Petni+Mode+Activated"  // Maybe a funny, scarier filter/expression pic here
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Matro 3-4 ta chobi lagbe max!
+  const pookieImages = {
+    normal: "/images/pookie_cute.jpg",     // Her best soft/cute smile picture
+    angry: "/images/pookie_angry.jpg",     // A funny, angry face or candid snapshot
+    favorite: "/images/pookie_fav.jpg"      // Another beautiful aesthetic picture
   };
 
-  // Compliments Pool based on Mood
-  const compliments = {
-    pookie: [
-      "Tumi prithibir shobcheye cute pookie! 🌸",
-      "Tomar smile ta ekdom taja golap er moto! ✨",
-      "Kotha dilem, tomake r konodin petni bolbo na (ajker jonno)! 🎀",
-      "Tumi jokhon bhalo thako, mone hoy dhoritri shanto! 🧸"
-    ],
-    petni: [
-      "Tumi dekhte ekdom pori, tobe rasta cross korar shomoy puratono gachher shakchunni! 👹",
-      "Exam er age 'kisu pori nai' bole top kora ultra-pro-max petni ekta! 📝👻",
-      "Tomar moddhe ekta mecho petni lukiye achhe, jeta makhon-mach dekhle jagroto hoy! 🐟",
-      "Ragle tomake eto baje lage jekhane bhoot-raও tomake dekhe 'Bismillah' pore! ☠️"
-    ]
+  const cuteQuotes = [
+    "Tumi prithibir shobcheye soft ar cute pookie! 🧸",
+    "Tomar bhalo-mon ta ekdom tulor megher moto niramish! ☁️",
+    "Kotha dilam, tomake r bhoot-petni bole khedabo na (ajker jonno)! 🎀",
+    "Tomar smile-ta mathay thakle shob dushchinta dore palay! ✨",
+    "Aesthetic feeds ar soft soft kotha—tumi asholei ekta pori! 🌸"
+  ];
+
+  const petniQuotes = [
+    "Dure thako! Ekhuni bhoot chorano dorkar! 👹",
+    "Exam er age 'kisu pori nai' bole top kora ultra petni ekta! 📝",
+    "Ragle tomake eto baje lage jekhane bhoot-raও voy pay! 💀",
+    "Mecho petni r moto shubidha pailei macher piche dhorbe! 🐟"
+  ];
+
+  const handleMagicClick = () => {
+    setClickCount((prev) => prev + 1);
+    const pool = isPetni ? petniQuotes : cuteQuotes;
+    const randomIndex = Math.floor(Math.random() * pool.length);
+    setPookieQuote(pool[randomIndex]);
   };
 
-  const generateCompliment = () => {
-    const currentPool = isPetni ? compliments.petni : compliments.pookie;
-    const randomIndex = Math.floor(Math.random() * currentPool.length);
-    setCompliment(currentPool[randomIndex]);
-  };
-
-  // Dynamic Text/Emoji based on Meter
-  const getMeterStatus = (val: number) => {
-    if (val <= 30) return { text: "Normal Pookie (Safe Zone 🧸)", color: "text-green-500" };
-    if (val <= 70) return { text: "Khaatash Mode (Needs Fuchka/Chocolate 🍫)", color: "text-yellow-500" };
-    return { text: "Full-blown Petni (RUN FOR YOUR LIFE! 👹)", color: "text-red-500" };
-  };
+  if (!mounted) return null;
 
   return (
-    <div className={`min-h-screen font-sans transition-colors duration-700 ease-in-out ${
-      isPetni ? "bg-slate-950 text-purple-200" : "bg-pink-50 text-pink-900"
+    <div className={`relative min-h-screen w-full transition-colors duration-1000 overflow-x-hidden selection:bg-pink-300 ${
+      isPetni ? "bg-[#1d1124] text-purple-200" : "bg-[#fff0f5] text-pink-900"
     }`}>
       
-      {/* 1. Header & Theme Switcher */}
-      <header className="p-6 flex justify-between items-center max-w-7xl mx-auto">
-        <h1 className="text-2xl font-black tracking-wider uppercase">
-          {isPetni ? "👹 Petni.exe" : "🎀 Pookie.Hub"}
-        </h1>
-        <button
-          onClick={() => {
-            setIsPetni(!isPetni);
-            setCompliment("Mood changed! Click again to reveal new traits. 👀");
-          }}
-          className={`px-6 py-3 rounded-full font-bold shadow-lg transform active:scale-95 transition-all duration-300 ${
-            isPetni 
-              ? "bg-pink-500 text-white hover:bg-pink-400 shadow-pink-900/50" 
-              : "bg-purple-600 text-white hover:bg-purple-500 shadow-pink-200"
+      {/* 🌸 Floating Background Elements */}
+      {!isPetni && (
+        <>
+          <FloatingHeart delay={0} left="5%" />
+          <FloatingHeart delay={2} left="25%" />
+          <FloatingHeart delay={5} left="60%" />
+          <FloatingHeart delay={1.5} left="85%" />
+          <FloatingHeart delay={4} left="45%" />
+        </>
+      )}
+
+      {/* 🦄 Top Glass Navbar */}
+      <nav className="fixed top-6 left-0 w-full z-50 px-6">
+        <div className={`max-w-4xl mx-auto flex justify-between items-center border backdrop-blur-xl px-6 py-3 rounded-full transition-all ${
+          isPetni ? "bg-purple-950/40 border-purple-800/40" : "bg-white/40 border-pink-200/50"
+        }`}>
+          <span className="text-lg font-black tracking-wider uppercase font-sans">
+            {isPetni ? "👹 Petni.exe" : "🎀 Pookie.Hub"}
+          </span>
+          <button
+            onClick={() => {
+              setIsPetni(!isPetni);
+              setPookieQuote(isPetni ? "Returned to sweet zone! 🌸" : "Uh-oh! Beast mode on! 👹");
+            }}
+            className={`px-4 py-2 rounded-full text-xs font-bold shadow-md active:scale-95 transition-all duration-300 ${
+              isPetni ? "bg-pink-400 text-white" : "bg-purple-600 text-white"
+            }`}
+          >
+            {isPetni ? "🌸 Make Her Pookie" : "👹 Trigger Petni Mode"}
+          </button>
+        </div>
+      </nav>
+
+      {/* 🧸 Hero & Dynamic Main Image Display */}
+      <main className="max-w-4xl mx-auto px-6 pt-32 pb-24 relative z-10 flex flex-col items-center">
+        
+        {/* Soft Heading */}
+        <motion.div 
+          key={isPetni ? "petni-head" : "pookie-head"}
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-10"
+        >
+          <h1 className="text-5xl md:text-7xl font-black font-sans tracking-tight">
+            {isPetni ? "The Ultimate Petni" : "The Softest Pookie"}
+          </h1>
+          <p className="text-sm font-medium uppercase tracking-[0.2em] opacity-60 mt-3 font-sans">
+            {isPetni ? "— Anger level 999% —" : "— Custom Designed for Her —"}
+          </p>
+        </motion.div>
+
+        {/* 🎞️ The Hero Image Component - Custom Visual Frame */}
+        <motion.div 
+          key={isPetni ? "petni-img" : "pookie-img"}
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 100 }}
+          className={`p-4 rounded-[40px] shadow-2xl max-w-sm w-full mb-12 border-4 transition-all ${
+            isPetni ? "bg-purple-900/30 border-purple-500" : "bg-white border-pink-300"
           }`}
         >
-          {isPetni ? "🌸 Switch to Pookie Mode" : "👹 Trigger Petni Mode"}
-        </button>
-      </header>
-
-      {/* 2. Hero Section - Updated with dynamic image */}
-      <main className="max-w-7xl mx-auto px-4 py-12">
-        <div className="grid md:grid-cols-2 gap-12 items-center text-center md:text-left">
-          
-          {/* Text Content */}
-          <div>
-            <div className="mb-6 inline-block animate-bounce text-7xl">
-              {isPetni ? "🧛‍♀️" : "🧸"}
+          <div className="aspect-[3/4] rounded-[28px] overflow-hidden relative group">
+            <img 
+              src={isPetni ? pookieImages.angry : pookieImages.normal} 
+              alt="Pookie" 
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+            {/* Soft Overlay Pill */}
+            <div className="absolute bottom-4 left-0 right-0 flex justify-center">
+              <span className={`px-4 py-1.5 rounded-full text-xs font-bold text-white tracking-widest uppercase shadow-md ${
+                isPetni ? "bg-purple-700 animate-pulse" : "bg-pink-400"
+              }`}>
+                {isPetni ? "⚠️ High Risk Zone" : "🍭 Cutest Human"}
+              </span>
             </div>
-            
-            <h2 className="text-4xl md:text-6xl font-extrabold mb-4 leading-tight">
-              {isPetni ? (
-                <span>Meet My Favourite <br/><span className="text-purple-500">Shakchunni</span> Bandhubi</span>
-              ) : (
-                <span>Meet My Favourite <br/><span className="text-pink-500">Pookie</span> Bandhubi</span>
-              )}
-            </h2>
-            
-            <p className="text-lg opacity-80 max-w-xl mb-12 mx-auto md:mx-0">
-              {isPetni 
-                ? "Ulta paa, elomelo chul, ar machher prothi obhinob attraction. Real monster traits, guaranteed."
-                : "A bundle of joy, pure aesthetic feeds, soft soft kotha, ar ekta pure innocent atma. Treat with care."}
+          </div>
+        </motion.div>
+
+        {/* ✨ Interactive Magical Quote Box */}
+        <div className={`w-full max-w-xl p-8 rounded-[35px] text-center border transition-all shadow-xl ${
+          isPetni ? "bg-purple-950/40 border-purple-800" : "bg-white/80 border-pink-100"
+        }`}>
+          <div className="text-3xl mb-3">{isPetni ? "🔮" : "💫"}</div>
+          <div className="min-h-[60px] flex items-center justify-center mb-6 px-4">
+            <p className="text-xl italic font-medium tracking-wide">
+              "{pookieQuote}"
             </p>
           </div>
+          <button
+            onClick={handleMagicClick}
+            className={`px-8 py-3 rounded-full font-bold text-sm tracking-widest uppercase shadow-lg transform active:scale-95 transition-all ${
+              isPetni 
+                ? "bg-purple-600 text-white hover:bg-purple-700 shadow-purple-900/40" 
+                : "bg-pink-400 text-white hover:bg-pink-500 shadow-pink-200"
+            }`}
+          >
+            {isPetni ? "Click to Get Roasted 💀" : "Click for Warm Hearts 🌸"}
+          </button>
+        </div>
 
-          {/* DYNAMIC IMAGE DISPLAY */}
-          <div className="flex justify-center md:justify-end">
-            <div className={`p-3 rounded-3xl shadow-xl transition-all duration-500 transform ${
-              isPetni ? "bg-slate-900 border-purple-900 border-2 shadow-purple-900/40" : "bg-white border-pink-100 border-2 shadow-pink-200"
-            }`}>
-              {/* Replace placeholders with bandhubiImages.pookie/petni in real image sources */}
-              <div className="w-[300px] h-[400px] md:w-[400px] md:h-[530px] rounded-2xl overflow-hidden relative group">
-                <img 
-                  src={isPetni ? bandhubiImages.petni : bandhubiImages.pookie} 
-                  alt={isPetni ? "Petni Mode Bandhubi" : "Pookie Mode Bandhubi"} 
-                  className="w-full h-full object-cover transition-all duration-500" 
-                />
-                
-                {/* Mood Overlay */}
-                <div className={`absolute inset-0 flex items-end p-6 bg-gradient-to-t from-black/80 to-transparent transition-opacity duration-500 ${isPetni ? "opacity-100" : "opacity-0"}`}>
-                    <span className="text-2xl font-bold text-white bg-red-600 px-4 py-2 rounded-lg">PETNI MODE ACTIVE! 👹</span>
-                </div>
-                 <div className={`absolute inset-0 flex items-end p-6 bg-gradient-to-t from-black/40 to-transparent transition-opacity duration-500 ${!isPetni ? "opacity-100" : "opacity-0"}`}>
-                    <span className="text-2xl font-bold text-white bg-pink-500 px-4 py-2 rounded-lg">POOKIE VIBES 🎀</span>
-                </div>
-              </div>
-            </div>
+        {/* 🍨 Tiny Secondary Visual Grid (Optional/Requires just 1 more image) */}
+        <div className="w-full max-w-xl grid grid-cols-2 gap-4 mt-8">
+          <div className={`p-4 rounded-[25px] flex flex-col justify-center border text-center ${
+            isPetni ? "bg-purple-950/20 border-purple-900" : "bg-pink-100/40 border-pink-200/60"
+          }`}>
+            <span className="text-2xl mb-1">🍭</span>
+            <span className="text-xs font-bold opacity-60 uppercase tracking-widest">Total Clicks</span>
+            <span className="text-2xl font-black mt-1">{clickCount}</span>
+          </div>
+
+          <div className={`rounded-[25px] overflow-hidden border p-2 ${
+            isPetni ? "bg-purple-950/20 border-purple-900" : "bg-white border-pink-200/60"
+          }`}>
+            <img 
+              src={pookieImages.favorite} 
+              alt="Fav Frame" 
+              className="w-full h-32 object-cover rounded-[18px]" 
+            />
           </div>
         </div>
 
-        <hr className={`my-20 border-t-2 ${isPetni ? "border-slate-800" : "border-pink-200"}`} />
-
-        {/* 3. Interactive Petni Meter */}
-        <section className={`p-8 rounded-3xl mb-12 shadow-xl border backdrop-blur-md transition-all duration-500 ${
-          isPetni ? "bg-slate-900/60 border-purple-900/50" : "bg-white/80 border-pink-100"
-        }`}>
-          <h3 className="text-2xl font-bold mb-2">📊 Current Anger Meter</h3>
-          <p className="text-sm opacity-70 mb-6">Adjust the slider to check her current monster state</p>
-          
-          <input 
-            type="range" 
-            min="0" 
-            max="100" 
-            value={meterValue} 
-            onChange={(e) => setMeterValue(Number(e.target.value))}
-            className="w-full h-3 bg-gray-300 rounded-lg appearance-none cursor-pointer accent-current mb-4"
-          />
-          
-          <div className="text-xl font-extrabold mt-2 text-center">
-            Level: <span className={isPetni ? "text-purple-400" : "text-pink-600"}>{meterValue}%</span>
-          </div>
-          <div className={`mt-2 font-bold text-lg text-center ${getMeterStatus(meterValue).color}`}>
-            {getMeterStatus(meterValue).text}
-          </div>
-        </section>
-
-        {/* 4. Dynamic Compliment Generator */}
-        <section className={`p-8 rounded-3xl mb-12 text-center transition-all duration-500 ${
-          isPetni ? "bg-purple-950/40 border border-purple-800" : "bg-pink-100/50 border border-pink-200"
-        }`}>
-          <h3 className="text-2xl font-bold mb-4">🔮 The Ultimate Truth Generator</h3>
-          <div className="min-h-[80px] flex items-center justify-center px-4 py-3 bg-black/5 rounded-xl mb-6">
-            <p className="text-xl font-medium italic">{compliment}</p>
-          </div>
-          <button
-            onClick={generateCompliment}
-            className={`px-8 py-3 rounded-xl font-bold tracking-wide transition-all ${
-              isPetni 
-                ? "bg-purple-600 text-white hover:bg-purple-700" 
-                : "bg-pink-600 text-white hover:bg-pink-700"
-            }`}
-          >
-            {isPetni ? "Get Roasted 💀" : "Get a Compliment 🌸"}
-          </button>
-        </section>
-
-        {/* 5. Mecho Petni Treat Box */}
-        <section className="mt-24">
-          <h3 className="text-3xl font-bold mb-8">🍲 Food Treat Box (Bribery Options)</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            
-            {/* Food 1 */}
-            <div className={`p-6 rounded-2xl border transition-all ${
-              isPetni ? "bg-slate-900 border-purple-900" : "bg-white border-pink-200"
-            }`}>
-              <div className="text-4xl mb-3">🌶️</div>
-              <h4 className="font-bold text-lg mb-1">Rakter Bodle Fuchka</h4>
-              <p className="text-sm opacity-75">Spicy hot fuchka extra tok shoho. Eita dile mood instant 20% drop kore.</p>
-            </div>
-
-            {/* Food 2 */}
-            <div className={`p-6 rounded-2xl border transition-all ${
-              isPetni ? "bg-slate-900 border-purple-900" : "bg-white border-pink-200"
-            }`}>
-              <div className="text-4xl mb-3">🐟</div>
-              <h4 className="font-bold text-lg mb-1">Mecho Target (Illish/Rui)</h4>
-              <p className="text-sm opacity-75">Petni style deep-fried fish. Smell pailei gachh theke niche neme ashbe.</p>
-            </div>
-
-            {/* Food 3 */}
-            <div className={`p-6 rounded-2xl border transition-all ${
-              isPetni ? "bg-slate-900 border-purple-900" : "bg-white border-pink-200"
-            }`}>
-              <div className="text-4xl mb-3">☕</div>
-              <h4 className="font-bold text-lg mb-1">Rong Cha (Anti-Bhoot Remedy)</h4>
-              <p className="text-sm opacity-75">Shondha belar kacher cup-er rong cha. Brain refresh korar shera upay.</p>
-            </div>
-
-          </div>
-        </section>
-
+        {/* Minimal Footer */}
+        <footer className="mt-24 pt-8 text-center text-[10px] font-mono tracking-widest opacity-40 border-t w-full max-w-xl border-current/10">
+          RELAXSTUDIO POOKIE ARCHIVE • 2026
+        </footer>
       </main>
 
-      {/* Footer */}
-      <footer className="py-8 text-center text-xs opacity-50 max-w-7xl mx-auto border-t border-current/10 mt-12">
-        Made for my favorite Pookie + Petni Bandhubi © {new Date().getFullYear()}
-      </footer>
+      <style jsx global>{`
+        ::-webkit-scrollbar { display: none; }
+        html { scroll-behavior: smooth; }
+        body { 
+          -ms-overflow-style: none; 
+          scrollbar-width: none;
+        }
+      `}</style>
     </div>
   );
 }
