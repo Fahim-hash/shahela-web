@@ -1,140 +1,189 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowDown, ArrowLeft, ArrowRight, Heart, Sparkles, Stars, X } from "lucide-react";
+import {
+  ArrowDownRight,
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  Heart,
+  Sparkles,
+  X,
+} from "lucide-react";
 
 const photos = [
-  { src: "/images/shahela1.jpg", alt: "A favourite memory" },
-  { src: "/images/shahela2.jpg", alt: "A lovely moment" },
-  { src: "/images/shahela3.jpg", alt: "A beautiful memory" },
-  { src: "/images/shahela4.jpg", alt: "A day to remember" },
-  { src: "/images/shahela5.jpg", alt: "A little piece of happiness" },
+  { src: "/images/shahela1.jpg", alt: "Shahela, captured in a lovely moment", note: "The birthday portrait" },
+  { src: "/images/shahela2.jpg", alt: "A favourite memory of Shahela", note: "A little joy" },
+  { src: "/images/shahela3.jpg", alt: "A beautiful memory with Shahela", note: "A moment to keep" },
+  { src: "/images/shahela4.jpg", alt: "A day worth remembering", note: "Golden memories" },
+  { src: "/images/shahela5.jpg", alt: "A happy moment with Shahela", note: "Simply unforgettable" },
 ];
 
 export default function BirthdayPage() {
-  const [opened, setOpened] = useState(false);
+  const [letterOpen, setLetterOpen] = useState(false);
   const [activePhoto, setActivePhoto] = useState<number | null>(null);
 
+  useEffect(() => {
+    if (activePhoto === null && !letterOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setActivePhoto(null);
+        setLetterOpen(false);
+      }
+      if (activePhoto !== null && event.key === "ArrowRight") {
+        setActivePhoto((current) => current === null ? null : (current + 1) % photos.length);
+      }
+      if (activePhoto !== null && event.key === "ArrowLeft") {
+        setActivePhoto((current) => current === null ? null : (current - 1 + photos.length) % photos.length);
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [activePhoto, letterOpen]);
+
   const movePhoto = (direction: number) => {
-    if (activePhoto === null) return;
-    setActivePhoto((activePhoto + direction + photos.length) % photos.length);
+    setActivePhoto((current) =>
+      current === null ? null : (current + direction + photos.length) % photos.length
+    );
   };
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#090509] text-[#fff8f2] selection:bg-rose-300 selection:text-[#250b18]">
-      <div aria-hidden="true" className="pointer-events-none fixed inset-0">
-        <div className="absolute -left-40 -top-40 h-[34rem] w-[34rem] rounded-full bg-rose-900/25 blur-[120px]" />
-        <div className="absolute -bottom-48 -right-40 h-[38rem] w-[38rem] rounded-full bg-amber-700/15 blur-[130px]" />
-        <div className="absolute inset-0 opacity-[0.06]" style={{ backgroundImage: "radial-gradient(#f8d8c8 0.7px, transparent 0.7px)", backgroundSize: "22px 22px" }} />
-      </div>
-
-      <header className="relative z-10 mx-auto flex w-full max-w-7xl items-center justify-between px-5 py-6 sm:px-8">
-        <a href="/" className="text-xs font-semibold uppercase tracking-[0.28em] text-rose-100/75 transition hover:text-white">A little universe</a>
-        <span className="text-[10px] uppercase tracking-[0.25em] text-white/35">A day worth celebrating · 25 November</span>
+    <main className="min-h-screen overflow-hidden bg-[#f4f0e7] text-[#183c32] selection:bg-[#e66b4e] selection:text-white">
+      <header className="mx-auto flex max-w-[1440px] items-center justify-between px-5 py-5 sm:px-10 lg:px-16">
+        <a href="/" className="font-serif text-xl font-semibold tracking-tight">S. <span className="italic font-normal">Studio</span></a>
+        <div className="hidden items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#183c32]/55 sm:flex">
+          <span className="h-1.5 w-1.5 rounded-full bg-[#e66b4e]" />
+          A birthday edition
+        </div>
+        <a href="#memories" className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] transition hover:text-[#e66b4e]">
+          The memories <ArrowUpRight size={14} />
+        </a>
       </header>
 
-      <section className="relative z-10 mx-auto grid min-h-[82vh] w-full max-w-7xl items-center gap-12 px-5 pb-20 pt-8 sm:px-8 md:grid-cols-[1fr_0.85fr] md:gap-16 md:pb-28">
-        <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9 }} className="order-2 text-center md:order-1 md:text-left">
-          <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-rose-200/15 bg-rose-200/[0.06] px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-rose-200/80">
-            <Sparkles size={13} /> Today is all about you
-          </div>
-          <p className="mb-4 font-serif text-lg italic text-amber-200/75">To someone who makes ordinary moments feel special</p>
-          <h1 className="font-serif text-[clamp(4.5rem,12vw,9rem)] font-medium leading-[0.82] tracking-[-0.075em] text-[#fff7ef]">
-            Happy<br /><span className="bg-gradient-to-r from-rose-200 via-amber-100 to-rose-300 bg-clip-text italic text-transparent">Birthday.</span>
+      <section className="relative mx-auto grid max-w-[1440px] items-center gap-10 px-5 pb-20 pt-8 sm:px-10 md:min-h-[760px] md:grid-cols-[1.05fr_.95fr] md:gap-6 md:px-16 md:py-16">
+        <div className="pointer-events-none absolute -left-24 top-20 h-72 w-72 rounded-full border border-[#183c32]/[0.08]" />
+        <div className="pointer-events-none absolute -left-10 top-36 h-44 w-44 rounded-full border border-[#183c32]/[0.08]" />
+
+        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.75 }} className="relative z-10 order-2 md:order-1">
+          <p className="mb-7 flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.28em] text-[#e66b4e]">
+            <span className="h-px w-8 bg-[#e66b4e]" /> 25 November · A day for you
+          </p>
+          <p className="mb-3 font-serif text-xl italic text-[#183c32]/65">To Shahela, with love</p>
+          <h1 className="max-w-3xl font-serif text-[clamp(4.5rem,11vw,10rem)] leading-[.78] tracking-[-.075em]">
+            Happy
+            <span className="mt-3 block text-[#e66b4e] italic">Birthday<span className="text-[#183c32]">.</span></span>
           </h1>
-          <div className="my-8 flex items-center justify-center gap-4 md:justify-start">
-            <span className="h-px w-12 bg-rose-200/40" />
-            <p className="text-sm font-medium uppercase tracking-[0.5em] text-rose-100/75">Shahela</p>
-            <span className="h-px w-12 bg-rose-200/40" />
+          <div className="my-9 flex items-center gap-4">
+            <span className="h-px w-12 bg-[#183c32]/25" />
+            <span className="text-[11px] font-bold uppercase tracking-[0.42em]">Shahela</span>
+            <span className="h-px w-12 bg-[#183c32]/25" />
           </div>
-          <p className="mx-auto max-w-lg font-serif text-lg leading-9 text-white/65 md:mx-0 md:text-xl">
-            আকাশের সবটুকু নীল আর বসন্তের সবটুকু স্নিগ্ধতা যেন তোমার হাসিতে মিশে থাকে।
+          <p className="max-w-xl font-serif text-xl leading-[1.8] text-[#183c32]/80 sm:text-2xl">
+            তোমার নতুন বছরটা ভরে উঠুক শান্তি, আনন্দ আর এমন সব মুহূর্তে—যেগুলো মনে পড়লে অজান্তেই মুখে হাসি চলে আসে।
           </p>
-          <p className="mx-auto mt-4 max-w-md text-sm leading-7 text-white/45 md:mx-0">
-            তোমার প্রতিটি দিন হোক নতুন আনন্দে ভরা, প্রতিটি স্বপ্ন খুঁজে পাক নিজের ঠিকানা। হাসিখুশি থেকো, ভালো থেকো—আজ, আগামীকাল, সবসময়।
+          <p className="mt-5 max-w-lg text-sm leading-7 text-[#183c32]/60">
+            Keep being curious, keep dreaming big, and never lose the little things that make you who you are. Wishing you a year that feels as wonderful as you deserve.
           </p>
-          <div className="mt-9 flex flex-col items-center gap-4 sm:flex-row md:items-start">
-            <button onClick={() => setOpened(true)} className="group inline-flex items-center gap-3 rounded-full bg-[#f4d9cf] px-7 py-4 text-xs font-bold uppercase tracking-[0.2em] text-[#2b111b] shadow-[0_10px_50px_rgba(244,180,190,0.15)] transition hover:-translate-y-1 hover:bg-white">
-              Open your little surprise <Heart size={15} className="transition group-hover:scale-125" />
+          <div className="mt-9 flex flex-wrap items-center gap-5">
+            <button onClick={() => setLetterOpen(true)} className="group inline-flex items-center gap-5 bg-[#183c32] px-7 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-[#f4f0e7] transition duration-300 hover:bg-[#e66b4e]">
+              Read your birthday note <ArrowUpRight size={15} className="transition group-hover:translate-x-1 group-hover:-translate-y-1" />
             </button>
-            <a href="#memories" className="inline-flex items-center gap-2 px-5 py-4 text-xs uppercase tracking-[0.2em] text-white/50 transition hover:text-white">
-              Explore memories <ArrowDown size={14} />
+            <a href="#memories" className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-[#183c32]/60 transition hover:text-[#e66b4e]">
+              Scroll to memories <ArrowDownRight size={15} />
             </a>
           </div>
+          <p className="mt-12 font-serif text-sm italic text-[#183c32]/40">A little reminder: you make the world brighter.</p>
         </motion.div>
 
-        <motion.div initial={{ opacity: 0, scale: 0.92, rotate: 2 }} animate={{ opacity: 1, scale: 1, rotate: 0 }} transition={{ duration: 1.1, delay: 0.15 }} className="order-1 mx-auto w-full max-w-[390px] md:order-2">
-          <div className="relative p-3">
-            <div className="absolute -inset-5 rounded-[48%] bg-gradient-to-br from-rose-400/20 via-transparent to-amber-300/15 blur-2xl" />
-            <div className="relative aspect-[4/5] overflow-hidden rounded-[48%_48%_28px_28px] border border-white/15 bg-white/5 shadow-[0_30px_100px_rgba(0,0,0,0.55)]">
-              <img src="/images/shahela1.jpg" alt="Shahela" className="h-full w-full object-cover" fetchPriority="high" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#160b12]/70 via-transparent to-white/5" />
-              <div className="absolute bottom-8 left-0 right-0 text-center">
-                <p className="font-serif text-3xl italic text-white drop-shadow-lg">For you, always.</p>
-                <p className="mt-2 text-[9px] uppercase tracking-[0.4em] text-white/65">A collection of good wishes</p>
-              </div>
-            </div>
-            <motion.div animate={{ y: [0, -9, 0], rotate: [0, 5, 0] }} transition={{ duration: 5, repeat: Infinity }} className="absolute -right-2 top-16 rounded-2xl border border-white/15 bg-[#25151f]/80 p-4 shadow-xl backdrop-blur-xl">
-              <Stars className="text-amber-200" size={22} />
-            </motion.div>
-            <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 4, repeat: Infinity }} className="absolute -bottom-2 -left-2 rounded-full border border-rose-100/20 bg-[#28131f]/90 px-5 py-3 text-[10px] uppercase tracking-[0.25em] text-rose-100/80 shadow-xl backdrop-blur-xl">
-              25 · 11 · 2008
-            </motion.div>
+        <motion.div initial={{ opacity: 0, x: 30, rotate: 2 }} animate={{ opacity: 1, x: 0, rotate: 0 }} transition={{ duration: 0.9, delay: 0.12 }} className="relative order-1 mx-auto w-full max-w-[540px] md:order-2">
+          <div className="absolute -right-3 -top-3 z-20 flex h-24 w-24 rotate-12 flex-col items-center justify-center rounded-full bg-[#e66b4e] text-center text-[#fff8ed] shadow-xl sm:-right-5 sm:-top-5">
+            <Sparkles size={17} />
+            <span className="mt-1 text-[8px] font-bold uppercase leading-4 tracking-[0.16em]">Your day<br />your story</span>
           </div>
+          <div className="relative bg-white p-3 pb-14 shadow-[0_25px_80px_rgba(24,60,50,.14)] sm:p-4 sm:pb-16">
+            <div className="relative aspect-[4/5] overflow-hidden bg-[#d8d4c8]">
+              <img src="/images/shahela1.jpg" alt="Shahela" fetchPriority="high" className="h-full w-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#102a23]/45 via-transparent to-transparent" />
+              <span className="absolute bottom-5 left-5 font-serif text-3xl italic text-white sm:bottom-7 sm:left-7 sm:text-4xl">A day to celebrate.</span>
+            </div>
+            <div className="absolute bottom-4 right-5 flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.2em] text-[#183c32]/55 sm:bottom-5 sm:right-7">
+              <Heart size={12} fill="#e66b4e" stroke="#e66b4e" /> 25 · 11 · 2008
+            </div>
+          </div>
+          <span className="absolute -bottom-8 -left-5 -z-0 hidden font-serif text-8xl italic text-[#183c32]/[0.06] lg:block">Shahela</span>
         </motion.div>
       </section>
 
-      <section id="memories" className="relative z-10 border-t border-white/[0.08] bg-white/[0.025] px-5 py-24 sm:px-8 md:py-32">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-12 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
-            <div>
-              <p className="mb-3 text-[10px] uppercase tracking-[0.35em] text-rose-200/60">Little moments, lasting smiles</p>
-              <h2 className="font-serif text-5xl tracking-tight text-white sm:text-6xl">A few lovely memories<span className="text-rose-300">.</span></h2>
-            </div>
-            <p className="max-w-xs text-sm leading-7 text-white/40">Some moments deserve their own little place in time. Tap a photograph to take a closer look.</p>
-          </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-5">
-            {photos.map((photo, index) => (
-              <motion.button key={photo.src} type="button" onClick={() => setActivePhoto(index)} whileHover={{ y: -7 }} className={`group relative aspect-[4/5] overflow-hidden rounded-2xl border border-white/10 bg-white/5 text-left ${index === 1 || index === 4 ? "sm:translate-y-8" : ""}`} aria-label={`View memory ${index + 1}`}>
-                <img src={photo.src} alt={photo.alt} loading="lazy" className="h-full w-full object-cover transition duration-700 group-hover:scale-110" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent opacity-70 transition group-hover:opacity-100" />
-                <span className="absolute bottom-4 left-4 text-[9px] uppercase tracking-[0.25em] text-white/80">Memory 0{index + 1}</span>
-              </motion.button>
-            ))}
-          </div>
-          <div className="mt-20 flex items-center justify-center gap-3 text-rose-100/50">
-            <span className="h-px w-12 bg-rose-100/20" /><Heart size={13} fill="currentColor" /><span className="h-px w-12 bg-rose-100/20" />
-          </div>
+      <section className="border-y border-[#183c32]/10 bg-[#e9e4d9] px-5 py-5 sm:px-10 lg:px-16">
+        <div className="mx-auto flex max-w-[1280px] flex-col items-center justify-between gap-3 text-center sm:flex-row sm:text-left">
+          <p className="font-serif text-lg italic text-[#183c32]/75">“The best is yet to bloom.”</p>
+          <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-[#183c32]/40">A new chapter begins · 25.11</p>
         </div>
       </section>
 
-      <footer className="relative z-10 px-5 py-12 text-center">
-        <p className="font-serif text-2xl italic text-white/70">May life be as beautiful as your kindest dreams.</p>
-        <p className="mt-5 text-[9px] uppercase tracking-[0.35em] text-white/25">Made with love · RelaxStudio</p>
-        <a href="/" className="mt-7 inline-block text-[10px] uppercase tracking-[0.25em] text-rose-200/55 transition hover:text-white">Back to the universe</a>
+      <section id="memories" className="mx-auto max-w-[1440px] px-5 py-24 sm:px-10 sm:py-32 lg:px-16">
+        <div className="mb-12 grid gap-6 md:grid-cols-[1fr_300px] md:items-end">
+          <div>
+            <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.3em] text-[#e66b4e]">The photo journal · 01—05</p>
+            <h2 className="font-serif text-5xl leading-[.95] tracking-[-.05em] sm:text-7xl">Moments worth<br /><span className="italic text-[#e66b4e]">keeping.</span></h2>
+          </div>
+          <p className="max-w-sm text-sm leading-7 text-[#183c32]/55">A small collection of snapshots, smiles and memories. Choose a photograph to see it up close.</p>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-6 sm:gap-5">
+          {photos.map((photo, index) => (
+            <motion.button
+              key={photo.src}
+              type="button"
+              onClick={() => setActivePhoto(index)}
+              whileHover={{ y: -7 }}
+              className={`group relative overflow-hidden bg-[#ded9ce] text-left ${index === 0 ? "col-span-2 row-span-2 aspect-[4/5] sm:col-span-3 sm:aspect-[4/5]" : "aspect-[4/5] sm:col-span-1"} ${index === 3 ? "sm:col-start-2" : ""}`}
+              aria-label={`Open photograph: ${photo.note}`}
+            >
+              <img src={photo.src} alt={photo.alt} loading="lazy" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#102a23]/65 via-transparent to-transparent opacity-80 transition group-hover:opacity-100" />
+              <span className="absolute bottom-4 left-4 text-[9px] font-bold uppercase tracking-[0.2em] text-white/90">{photo.note}</span>
+              <span className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full border border-white/50 bg-black/10 text-white opacity-0 backdrop-blur-sm transition group-hover:opacity-100"><ArrowUpRight size={14} /></span>
+            </motion.button>
+          ))}
+        </div>
+      </section>
+
+      <footer className="bg-[#183c32] px-5 py-16 text-[#f4f0e7] sm:px-10 sm:py-20 lg:px-16">
+        <div className="mx-auto flex max-w-[1280px] flex-col items-center text-center">
+          <Heart size={20} className="mb-6 text-[#e66b4e]" />
+          <p className="font-serif text-3xl italic sm:text-5xl">May this year be your favourite yet.</p>
+          <p className="mt-5 max-w-md text-xs leading-6 text-white/50">Wishing you a beautiful birthday and a year full of kind people, brave dreams and unforgettable days.</p>
+          <div className="my-9 h-px w-full max-w-[180px] bg-white/15" />
+          <p className="text-[9px] font-semibold uppercase tracking-[0.28em] text-white/35">Made with care · 25 November</p>
+          <a href="/" className="mt-7 text-[10px] font-bold uppercase tracking-[0.2em] text-[#f4f0e7]/65 transition hover:text-[#e66b4e]">Back to home ↗</a>
+        </div>
       </footer>
 
       <AnimatePresence>
-        {opened && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center bg-[#080408]/90 p-5 backdrop-blur-xl" onClick={() => setOpened(false)}>
-            <motion.div initial={{ opacity: 0, y: 24, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 16, scale: 0.98 }} transition={{ duration: 0.35 }} role="dialog" aria-modal="true" aria-labelledby="surprise-title" onClick={(event) => event.stopPropagation()} className="relative w-full max-w-xl overflow-hidden rounded-[30px] border border-rose-100/15 bg-[#1c1019] p-8 shadow-2xl sm:p-12">
-              <button onClick={() => setOpened(false)} aria-label="Close surprise" className="absolute right-5 top-5 rounded-full p-2 text-white/50 transition hover:bg-white/10 hover:text-white"><X size={18} /></button>
-              <div className="mb-7 flex justify-center"><div className="rounded-full border border-rose-200/20 bg-rose-200/10 p-4"><Heart size={25} className="text-rose-200" /></div></div>
-              <p className="text-center text-[9px] uppercase tracking-[0.4em] text-rose-200/60">A little note for you</p>
-              <h2 id="surprise-title" className="mt-4 text-center font-serif text-4xl italic text-white sm:text-5xl">Dear Shahela,</h2>
-              <p className="mt-7 text-center font-serif text-lg leading-9 text-white/75">শুভ জন্মদিন! তোমার জীবনের প্রতিটি নতুন সকাল বয়ে আনুক শান্তি, আনন্দ আর অসংখ্য সুন্দর সম্ভাবনা। তোমার মুখের হাসিটা যেন কখনো মলিন না হয়। নিজের মতো করেই সুন্দর থেকো, স্বপ্ন দেখতে থেকো, আর জীবনের প্রতিটি মুহূর্ত উপভোগ করো।</p>
-              <p className="mt-7 text-center font-serif text-xl italic text-amber-100/80">With lots of duas and warm wishes ♡</p>
-              <div className="mt-8 flex justify-center"><button onClick={() => setOpened(false)} className="rounded-full border border-white/15 px-6 py-3 text-[10px] uppercase tracking-[0.25em] text-white/65 transition hover:border-rose-200/50 hover:text-white">Keep this wish close</button></div>
+        {letterOpen && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center bg-[#102a23]/75 p-4 backdrop-blur-md" onClick={() => setLetterOpen(false)}>
+            <motion.div initial={{ opacity: 0, y: 24, scale: .97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 18, scale: .98 }} transition={{ duration: .3 }} role="dialog" aria-modal="true" aria-labelledby="birthday-note-title" onClick={(event) => event.stopPropagation()} className="relative w-full max-w-xl border border-[#183c32]/10 bg-[#f4f0e7] px-7 py-12 shadow-2xl sm:px-14 sm:py-16">
+              <button onClick={() => setLetterOpen(false)} aria-label="Close birthday note" className="absolute right-5 top-5 p-2 text-[#183c32]/50 transition hover:text-[#e66b4e]"><X size={19} /></button>
+              <div className="mx-auto mb-7 flex h-12 w-12 items-center justify-center rounded-full bg-[#e66b4e]/10 text-[#e66b4e]"><Heart size={20} /></div>
+              <p className="text-center text-[9px] font-bold uppercase tracking-[0.3em] text-[#e66b4e]">A note, just for you</p>
+              <h2 id="birthday-note-title" className="mt-4 text-center font-serif text-4xl italic tracking-tight sm:text-5xl">Dear Shahela,</h2>
+              <p className="mt-8 text-center font-serif text-lg leading-9 text-[#183c32]/80">শুভ জন্মদিন! তোমার জীবনের প্রতিটি সকাল শুরু হোক নতুন আশায়, প্রতিটি দিন কাটুক সুন্দর কিছু মুহূর্তে, আর প্রতিটি স্বপ্ন একদিন সত্যি হয়ে উঠুক। নিজের মতো করে উজ্জ্বল থেকো, হাসিখুশি থেকো—তোমার জন্য রইল অনেক অনেক দোয়া ও শুভকামনা।</p>
+              <p className="mt-8 text-center font-serif text-xl italic text-[#e66b4e]">With warmest wishes, always.</p>
+              <div className="mt-9 flex justify-center"><button onClick={() => setLetterOpen(false)} className="border border-[#183c32]/20 px-6 py-3 text-[9px] font-bold uppercase tracking-[0.2em] text-[#183c32] transition hover:border-[#e66b4e] hover:bg-[#e66b4e] hover:text-white">Close this note</button></div>
             </motion.div>
           </motion.div>
         )}
         {activePhoto !== null && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[110] flex items-center justify-center bg-black/95 p-5 backdrop-blur-xl" onClick={() => setActivePhoto(null)}>
-            <button onClick={() => setActivePhoto(null)} aria-label="Close photograph" className="absolute right-5 top-5 rounded-full bg-white/10 p-3 text-white hover:bg-white/20"><X size={20} /></button>
-            <button onClick={(event) => { event.stopPropagation(); movePhoto(-1); }} aria-label="Previous photograph" className="absolute left-3 z-10 rounded-full bg-white/10 p-3 text-white hover:bg-white/20 sm:left-8"><ArrowLeft size={20} /></button>
-            <motion.img key={photos[activePhoto].src} initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} src={photos[activePhoto].src} alt={photos[activePhoto].alt} className="max-h-[82vh] max-w-[min(80vw,900px)] rounded-2xl object-contain shadow-2xl" onClick={(event) => event.stopPropagation()} />
-            <button onClick={(event) => { event.stopPropagation(); movePhoto(1); }} aria-label="Next photograph" className="absolute right-3 z-10 rounded-full bg-white/10 p-3 text-white hover:bg-white/20 sm:right-8"><ArrowRight size={20} /></button>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[110] flex items-center justify-center bg-[#102a23]/95 p-5 backdrop-blur-md" onClick={() => setActivePhoto(null)}>
+            <button onClick={() => setActivePhoto(null)} aria-label="Close photo viewer" className="absolute right-5 top-5 rounded-full border border-white/20 p-3 text-white transition hover:bg-white/10"><X size={20} /></button>
+            <button onClick={(event) => { event.stopPropagation(); movePhoto(-1); }} aria-label="Previous photo" className="absolute left-3 z-10 rounded-full border border-white/20 p-3 text-white transition hover:bg-white/10 sm:left-8"><ArrowLeft size={20} /></button>
+            <div className="flex max-h-[88vh] max-w-[min(80vw,900px)] flex-col items-center gap-4" onClick={(event) => event.stopPropagation()}>
+              <motion.img key={photos[activePhoto].src} initial={{ opacity: 0, scale: .98 }} animate={{ opacity: 1, scale: 1 }} src={photos[activePhoto].src} alt={photos[activePhoto].alt} className="max-h-[78vh] max-w-full rounded-sm object-contain shadow-2xl" />
+              <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-white/65">{photos[activePhoto].note} · 0{activePhoto + 1} / 0{photos.length}</p>
+            </div>
+            <button onClick={(event) => { event.stopPropagation(); movePhoto(1); }} aria-label="Next photo" className="absolute right-3 z-10 rounded-full border border-white/20 p-3 text-white transition hover:bg-white/10 sm:right-8"><ArrowRight size={20} /></button>
           </motion.div>
         )}
       </AnimatePresence>
