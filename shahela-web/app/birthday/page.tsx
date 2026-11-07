@@ -3,213 +3,209 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, BookOpen,
-  Feather, Gift, Heart, Sparkles, X,
+  ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, Heart, Moon,
+  Sparkles, X, Volume2, VolumeX,
 } from "lucide-react";
 
 const photos = [
-  { src: "/images/shahela1.jpg", caption: "স্মৃতির প্রথম পাতা", alt: "শাহেলার ছবি" },
-  { src: "/images/shahela2.jpg", caption: "এক টুকরো আনন্দ", alt: "একটি সুন্দর মুহূর্ত" },
-  { src: "/images/shahela3.jpg", caption: "রোদ্দুর মাখা দিন", alt: "রোদেলা দিনের স্মৃতি" },
-  { src: "/images/shahela4.jpg", caption: "মায়াভরা মুহূর্ত", alt: "একটি মধুর স্মৃতি" },
-  { src: "/images/shahela5.jpg", caption: "গল্প হয়ে থাকা", alt: "প্রিয় একটি স্মৃতি" },
+  { src: "/images/shahela1.jpg", caption: "এই গল্পের প্রথম আলো", alt: "শাহেলার একটি সুন্দর ছবি" },
+  { src: "/images/shahela2.jpg", caption: "হাসির একটি বিকেল", alt: "শাহেলার স্মৃতি" },
+  { src: "/images/shahela3.jpg", caption: "নিজের মতো উজ্জ্বল", alt: "শাহেলার ছবি" },
+  { src: "/images/shahela4.jpg", caption: "একটু মায়া, একটু আলো", alt: "শাহেলার স্মৃতি" },
+  { src: "/images/shahela5.jpg", caption: "থেকে যাওয়া মুহূর্ত", alt: "শাহেলার ছবি" },
   ...Array.from({ length: 12 }, (_, i) => ({
     src: `/images/a${i + 1}${i === 4 ? ".png" : ".jpg"}`,
-    caption: ["অলিখিত গল্প", "হাসির দিনলিপি", "রঙিন বিকেল", "মায়ার ফ্রেম", "চেনা সেই হাসি", "স্মৃতির জানালা", "এক মুঠো সময়", "প্রিয় অধ্যায়", "আলোর মুহূর্ত", "মন ভালো করা দিন", "গল্পের ভাঁজে", "আরও কিছু স্মৃতি"][i],
+    caption: ["অল্প কথার গল্প", "এক চিলতে রোদ", "মনে রাখার মতো", "হাসির ফ্রেম", "চেনা এক মায়া", "স্মৃতির ভাঁজে", "সময় থেমে থাক", "একটি সুন্দর দিন", "আলোর কাছাকাছি", "মন ভালো করা", "প্রিয় কিছু দৃশ্য", "আরও কিছু গল্প"][i],
     alt: `স্মৃতির ছবি ${i + 6}`,
   })),
 ];
 
 const wishes = [
-  "তোমার প্রতিটি সকাল শুরু হোক নতুন আশায়, আর প্রতিটি সন্ধ্যা শেষ হোক একরাশ প্রশান্তিতে।",
-  "জীবনের প্রতিটি বাঁকে খুঁজে পাও আনন্দ, ভালোবাসা আর নিজের স্বপ্ন ছুঁয়ে দেখার সাহস।",
-  "তোমার হাসি থাকুক অমলিন, মন থাকুক আকাশের মতো উদার, আর পথ হোক আলোয় ভরা।",
-  "সময় তোমার জন্য লিখে রাখুক অসংখ্য সুন্দর গল্প—যার প্রতিটি পাতায় থাকবে প্রাপ্তির আনন্দ।",
+  "তোমার জীবনে এমন সব সকাল আসুক, যেগুলো শুরু হবে নিশ্চিন্ত হাসিতে; আর এমন সব রাত, যেগুলো শেষ হবে একরাশ শান্তিতে।",
+  "যে স্বপ্নগুলো কাউকে বলা হয় না, সেগুলোও একদিন সত্যি হোক। নিজের জন্য, নিজের মতো করে বাঁচার সাহস কখনো হারিয়ো না।",
+  "পৃথিবী তোমাকে সবসময় সহজ দিন দেবে না, তবু প্রতিটি কঠিন দিনের শেষে যেন নিজের ভেতর আলো খুঁজে পাও।",
 ];
 
+const stars = Array.from({ length: 24 }, (_, i) => ({
+  left: `${(i * 37 + 11) % 100}%`,
+  top: `${(i * 53 + 7) % 100}%`,
+  delay: (i % 7) * 0.45,
+  size: i % 4 === 0 ? 3 : 2,
+}));
+
 export default function BirthdayPage() {
-  const [surpriseOpen, setSurpriseOpen] = useState(false);
   const [activePhoto, setActivePhoto] = useState<number | null>(null);
+  const [letterOpen, setLetterOpen] = useState(false);
   const [wishIndex, setWishIndex] = useState(0);
+  const [finalOpen, setFinalOpen] = useState(false);
 
   useEffect(() => {
-    if (activePhoto === null && !surpriseOpen) return;
+    if (activePhoto === null && !finalOpen) return;
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setActivePhoto(null);
-        setSurpriseOpen(false);
+        setFinalOpen(false);
       }
-      if (activePhoto !== null && event.key === "ArrowRight") {
-        setActivePhoto((current) => current === null ? null : (current + 1) % photos.length);
-      }
-      if (activePhoto !== null && event.key === "ArrowLeft") {
-        setActivePhoto((current) => current === null ? null : (current - 1 + photos.length) % photos.length);
-      }
+      if (activePhoto !== null && event.key === "ArrowRight") setActivePhoto((v) => v === null ? null : (v + 1) % photos.length);
+      if (activePhoto !== null && event.key === "ArrowLeft") setActivePhoto((v) => v === null ? null : (v - 1 + photos.length) % photos.length);
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [activePhoto, surpriseOpen]);
+  }, [activePhoto, finalOpen]);
 
-  const movePhoto = (direction: number) => {
-    setActivePhoto((current) => current === null ? null : (current + direction + photos.length) % photos.length);
-  };
+  const movePhoto = (direction: number) => setActivePhoto((v) => v === null ? null : (v + direction + photos.length) % photos.length);
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#f3ead8] text-[#35251f] selection:bg-[#8b3441]/20">
-      <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-[url('/assets/background.png')] bg-cover bg-center opacity-[0.055] mix-blend-multiply" />
-        <div className="absolute inset-0 opacity-30" style={{ backgroundImage: "radial-gradient(#9b7652 0.65px, transparent 0.65px)", backgroundSize: "13px 13px" }} />
-        <div className="absolute -left-40 top-24 h-96 w-96 rounded-full bg-[#b77b68]/15 blur-[100px]" />
-        <div className="absolute -right-40 bottom-10 h-96 w-96 rounded-full bg-[#c4a36a]/20 blur-[110px]" />
+    <main className="relative min-h-screen overflow-hidden bg-[#090b12] text-[#f4eee4] selection:bg-[#d5ad72]/30">
+      <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(109,77,92,.24),transparent_48%),radial-gradient(ellipse_at_90%_70%,rgba(135,101,58,.13),transparent_35%)]" />
+        <div className="absolute inset-0 opacity-[0.12]" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px)", backgroundSize: "72px 72px" }} />
+        {stars.map((star, i) => <motion.span key={i} className="absolute rounded-full bg-[#e7c997]" style={{ left: star.left, top: star.top, width: star.size, height: star.size, boxShadow: "0 0 12px rgba(231,201,151,.7)" }} animate={{ opacity: [.15, .85, .15], scale: [1, 1.5, 1] }} transition={{ duration: 3 + star.delay, delay: star.delay, repeat: Infinity }} />)}
+        <div className="absolute -left-48 top-[30%] h-[32rem] w-[32rem] rounded-full bg-[#6c3f56]/10 blur-[120px]" />
+        <div className="absolute -right-48 top-[58%] h-[32rem] w-[32rem] rounded-full bg-[#9c7848]/10 blur-[130px]" />
       </div>
 
-      <header className="relative z-10 mx-auto flex max-w-[1320px] items-center justify-between px-5 py-6 sm:px-10 lg:px-16">
-        <a href="/" className="font-[var(--font-noto-bengali)] text-lg font-bold tracking-tight text-[#6e2938]">শাহেলার জন্য <span className="text-[#a47b4f]">✦</span></a>
-        <span className="hidden border-y border-[#9b7652]/35 px-4 py-2 font-[var(--font-noto-bengali)] text-xs tracking-[0.12em] text-[#806b58] sm:inline-flex">বিশেষ জন্মদিন সংখ্যা · ২৫ নভেম্বর</span>
-        <a href="#moments" className="group flex items-center gap-2 font-[var(--font-noto-bengali)] text-sm text-[#6e2938] transition hover:text-[#a47b4f]">স্মৃতির পাতায় <ArrowDown size={15} className="transition group-hover:translate-y-1" /></a>
+      <header className="relative z-10 mx-auto flex max-w-[1400px] items-center justify-between px-5 py-6 sm:px-10 lg:px-16">
+        <a href="/" className="font-[var(--font-noto-bengali)] text-sm tracking-wide text-[#e5c99a]">শাহেলার জন্য <span className="ml-1 text-[#a77b8d]">✳</span></a>
+        <div className="hidden items-center gap-3 font-[var(--font-noto-bengali)] text-[11px] tracking-[.22em] text-white/40 sm:flex"><span className="h-px w-8 bg-white/20" /> পঁচিশে নভেম্বর <span className="h-px w-8 bg-white/20" /></div>
+        <a href="#moments" className="group flex items-center gap-2 font-[var(--font-noto-bengali)] text-xs text-white/60 transition hover:text-[#e5c99a]">স্মৃতির দিকে <ArrowDown size={14} className="transition group-hover:translate-y-1" /></a>
       </header>
 
-      <section className="relative z-10 mx-auto grid max-w-[1320px] items-center gap-12 px-5 pb-24 pt-10 sm:px-10 md:min-h-[730px] md:grid-cols-[1.08fr_.92fr] md:gap-12 md:px-16 md:py-16">
-        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .8 }} className="relative z-10 order-2 md:order-1">
-          <div className="mb-7 inline-flex items-center gap-2 border border-[#9b7652]/35 bg-[#fffaf0]/65 px-4 py-2 font-[var(--font-noto-bengali)] text-xs text-[#8b3441] shadow-sm"><Sparkles size={13} /> আজ আনন্দের এক নতুন অধ্যায়</div>
-          <p className="mb-5 font-[var(--font-noto-bengali)] text-sm tracking-[0.12em] text-[#9b7652]">২৫ নভেম্বর · একটি বিশেষ দিনের গল্প</p>
-          <h1 className="font-[var(--font-noto-bengali)] font-black leading-[1.12] tracking-tight text-[#472d2a]">
-            <span className="block text-[clamp(3.7rem,9vw,7.6rem)]">শুভ</span>
-            <span className="mt-1 block text-[clamp(3.4rem,8.5vw,7.1rem)] text-[#8b3441]">জন্মদিন<span className="text-[#bd9864]">।</span></span>
+      <section className="relative z-10 mx-auto grid min-h-[calc(100svh-84px)] max-w-[1400px] items-center gap-12 px-5 pb-20 pt-8 sm:px-10 md:grid-cols-[1fr_.88fr] md:gap-16 md:px-16 md:py-12">
+        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }} className="order-2 md:order-1">
+          <div className="mb-8 flex items-center gap-3 font-[var(--font-noto-bengali)] text-xs tracking-[.18em] text-[#d6b47e]"><span className="h-px w-9 bg-[#d6b47e]/70" /> একটি দিন, একজন মানুষ, অনেক অনুভূতি</div>
+          <p className="mb-4 font-[var(--font-noto-bengali)] text-sm text-white/45">২৫ নভেম্বর · তোমার দিন</p>
+          <h1 className="font-[var(--font-noto-bengali)] font-black leading-[1.13] tracking-tight">
+            <span className="block text-[clamp(3.6rem,9vw,7.8rem)] text-[#f3eadb]">শুভ</span>
+            <span className="mt-1 block text-[clamp(3.6rem,9vw,7.8rem)] text-[#d9b783]">জন্মদিন<span className="text-[#a77b8d]">।</span></span>
           </h1>
-          <div className="mt-7 flex items-center gap-4 font-[var(--font-noto-bengali)] text-xl font-bold tracking-[0.18em] text-[#76513f]">
-            <span className="h-px w-12 bg-[#b28b62]" /> শাহেলা <span className="h-px w-12 bg-[#b28b62]" />
+          <div className="mt-7 flex items-center gap-4">
+            <span className="h-px w-12 bg-[#a77b8d]/70" />
+            <span className="font-[var(--font-noto-bengali)] text-2xl font-semibold tracking-[.12em] text-white/85">শাহেলা</span>
+            <span className="text-[#d9b783]">✦</span>
           </div>
-          <p className="mt-8 max-w-xl font-[var(--font-noto-bengali)] text-lg leading-[2.15] text-[#5f4a3e] sm:text-xl">
-            আজকের দিনটি কেবল ক্যালেন্ডারের একটি তারিখ নয়—আজ সেই মানুষটির জন্য, যার উপস্থিতিতে সাধারণ মুহূর্তও হয়ে ওঠে মনে রাখার মতো।
+          <p className="mt-8 max-w-xl font-[var(--font-noto-bengali)] text-lg leading-[2.1] text-white/70 sm:text-xl">
+            কিছু মানুষ জীবনে আসে, তারপর ধীরে ধীরে জীবনেরই একটা সুন্দর অংশ হয়ে যায়। তোমাকে নিয়ে এই ছোট্ট আয়োজন—সেই অনুভূতিরই সামান্য প্রকাশ।
           </p>
-          <p className="mt-4 max-w-lg font-[var(--font-noto-bengali)] text-base leading-8 text-[#806b58]">
-            জীবনের নতুন অধ্যায়ে জমা হোক অফুরন্ত আনন্দ, স্বপ্নপূরণের সাহস, প্রিয় মানুষের সান্নিধ্য আর অসংখ্য মধুর স্মৃতি।
+          <p className="mt-4 max-w-lg font-[var(--font-noto-bengali)] text-sm leading-8 text-white/40 sm:text-base">
+            আজকের দিনটা তোমার মতোই সুন্দর হোক। আর আগামী দিনগুলো জমিয়ে রাখুক এমন সব মুহূর্ত, যেগুলো মনে পড়লে অজান্তেই মুখে হাসি চলে আসে।
           </p>
-          <div className="mt-8 flex flex-wrap items-center gap-4">
-            <button onClick={() => setSurpriseOpen(true)} className="group inline-flex items-center gap-3 rounded-sm border border-[#6e2938] bg-[#7d3040] px-7 py-4 font-[var(--font-noto-bengali)] text-sm text-[#fff8ed] shadow-[0_12px_35px_rgba(91,42,48,.18)] transition duration-300 hover:-translate-y-1 hover:bg-[#632532]">
-              <Gift size={16} /> উপহারের খাম খোলো <ArrowUpRight size={14} className="transition group-hover:translate-x-1 group-hover:-translate-y-1" />
-            </button>
-            <a href="#moments" className="inline-flex items-center gap-2 px-2 py-3 font-[var(--font-noto-bengali)] text-sm text-[#806b58] transition hover:text-[#8b3441]">স্মৃতিগুলো দেখো <ArrowDown size={14} /></a>
+          <div className="mt-9 flex flex-wrap items-center gap-4">
+            <a href="#letter" className="group inline-flex items-center gap-3 border border-[#d9b783]/55 bg-[#d9b783] px-6 py-4 font-[var(--font-noto-bengali)] text-sm font-semibold text-[#17131a] transition duration-300 hover:-translate-y-1 hover:bg-[#ecd3a9]">কিছু কথা আছে <ArrowUpRight size={15} className="transition group-hover:translate-x-1 group-hover:-translate-y-1" /></a>
+            <a href="#moments" className="inline-flex items-center gap-2 px-3 py-3 font-[var(--font-noto-bengali)] text-sm text-white/55 transition hover:text-white">ছবিগুলো দেখো <ArrowDown size={14} /></a>
           </div>
-          <div className="mt-10 flex items-center gap-3 font-[var(--font-noto-bengali)] text-xs text-[#a18a72]"><Heart size={13} /> ভালোবাসা দিয়ে সাজানো কয়েকটি পাতা</div>
+          <div className="mt-12 flex items-center gap-3 text-white/30"><Moon size={14} /><span className="font-[var(--font-noto-bengali)] text-xs tracking-wide">এই আয়োজনটুকু শুধু তোমার জন্য</span></div>
         </motion.div>
 
-        <motion.div initial={{ opacity: 0, scale: .94, rotate: 2 }} animate={{ opacity: 1, scale: 1, rotate: 0 }} transition={{ duration: .9, delay: .12 }} className="relative order-1 mx-auto w-full max-w-[490px] md:order-2">
-          <div className="absolute -left-5 top-12 z-20 hidden -rotate-6 border border-[#c7ad86] bg-[#fff8e9] px-5 py-4 shadow-xl sm:block">
-            <p className="font-[var(--font-noto-bengali)] text-xs text-[#9b7652]">আজকের বিশেষণ</p>
-            <p className="mt-1 font-[var(--font-noto-bengali)] text-2xl font-bold text-[#8b3441]">প্রিয়তমা</p>
-          </div>
-          <div className="relative rotate-[1deg] border border-[#bda17a] bg-[#fff9ed] p-3 shadow-[0_28px_75px_rgba(74,48,33,.2)] sm:p-4">
-            <div className="absolute -right-4 -top-5 z-20 flex h-24 w-24 rotate-12 flex-col items-center justify-center rounded-full border-[5px] border-[#f3ead8] bg-[#8b3441] text-center font-[var(--font-noto-bengali)] text-[#fff8ed] shadow-xl">
-              <span className="text-xs">শুভ</span><span className="text-3xl font-bold leading-none">২৫</span><span className="text-xs">নভেম্বর</span>
-            </div>
-            <div className="relative aspect-[4/5] overflow-hidden bg-[#e7d8c0]">
+        <motion.div initial={{ opacity: 0, scale: .94, rotate: 1.5 }} animate={{ opacity: 1, scale: 1, rotate: 0 }} transition={{ duration: 1.1, delay: .15 }} className="relative order-1 mx-auto w-full max-w-[500px] md:order-2">
+          <div className="absolute -inset-6 rounded-[48%] bg-[#b68b72]/10 blur-[70px]" />
+          <div className="absolute -left-5 top-[16%] z-20 hidden h-24 w-24 items-center justify-center rounded-full border border-[#d9b783]/30 bg-[#11131b]/80 text-center font-[var(--font-noto-bengali)] text-xs leading-6 text-[#d9b783] backdrop-blur sm:flex">একটি<br />বিশেষ<br />দিন</div>
+          <div className="relative overflow-hidden border border-white/15 bg-[#171720] p-2 shadow-[0_35px_100px_rgba(0,0,0,.55)] sm:p-3">
+            <div className="relative aspect-[4/5] overflow-hidden">
               <img src="/images/shahela1.jpg" alt="শাহেলা" fetchPriority="high" className="h-full w-full object-cover object-[72%_center]" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#251714]/75 via-transparent to-transparent" />
-              <div className="absolute bottom-6 left-6 right-6 text-[#fff8ed] sm:bottom-8 sm:left-8">
-                <p className="font-[var(--font-noto-bengali)] text-sm text-white/80">এই সংখ্যার উৎসর্গ</p>
-                <p className="mt-1 font-[var(--font-noto-bengali)] text-5xl font-bold tracking-wide sm:text-6xl">শাহেলা<span className="text-[#e5bd83]">।</span></p>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#08090f]/90 via-[#08090f]/5 to-[#08090f]/10" />
+              <div className="absolute inset-x-0 bottom-0 p-6 sm:p-9">
+                <p className="font-[var(--font-noto-bengali)] text-xs tracking-[.18em] text-[#e7c997]/80">২৫ · ১১ · ২০০৮</p>
+                <p className="mt-3 font-[var(--font-noto-bengali)] text-5xl font-bold tracking-wide text-white sm:text-6xl">শাহেলা<span className="text-[#d9b783]">।</span></p>
+                <p className="mt-3 font-[var(--font-noto-bengali)] text-sm text-white/65">তোমার গল্পের নতুন একটি বছর শুরু হোক।</p>
               </div>
             </div>
-            <div className="flex items-center justify-between px-2 pb-1 pt-4 font-[var(--font-noto-bengali)] text-xs text-[#92775b] sm:px-3"><span>২৫ · ১১ · ২০০৮</span><span>একান্ত আপন <Heart size={12} className="ml-1 inline text-[#8b3441]" fill="currentColor" /></span></div>
           </div>
-          <motion.div animate={{ y: [0, -9, 0], rotate: [0, 5, 0] }} transition={{ duration: 5, repeat: Infinity }} className="absolute -bottom-7 -right-3 z-20 flex h-16 w-16 items-center justify-center rounded-full border border-[#b28b62]/50 bg-[#fff8e9] text-[#8b3441] shadow-xl sm:-right-7"><Feather size={27} /></motion.div>
+          <motion.div animate={{ y: [0, -10, 0], rotate: [0, 8, 0] }} transition={{ duration: 6, repeat: Infinity }} className="absolute -bottom-7 -right-4 flex h-16 w-16 items-center justify-center rounded-full border border-[#d9b783]/35 bg-[#11131b] text-[#d9b783] shadow-xl"><Sparkles size={24} /></motion.div>
         </motion.div>
       </section>
 
-      <section className="relative z-10 border-y border-[#bda17a]/45 bg-[#e9dcc7]/70 px-5 py-8">
-        <div className="mx-auto flex max-w-[1180px] flex-col items-center justify-between gap-3 text-center sm:flex-row sm:text-left">
-          <p className="font-[var(--font-noto-bengali)] text-2xl font-bold tracking-tight text-[#593a32] sm:text-3xl">জীবন হোক <span className="text-[#8b3441]">সুন্দর গল্পের মতো।</span></p>
-          <span className="font-[var(--font-noto-bengali)] text-sm text-[#92775b]">নতুন বছরের প্রথম পাতা · আজ থেকে</span>
+      <section className="relative z-10 border-y border-white/10 bg-white/[.025] px-5 py-10 sm:py-14">
+        <div className="mx-auto max-w-5xl text-center">
+          <p className="font-[var(--font-noto-bengali)] text-xs tracking-[.24em] text-[#d9b783]/70">একটা কথা মনে রেখো</p>
+          <p className="mx-auto mt-5 max-w-4xl font-[var(--font-noto-bengali)] text-2xl font-medium leading-[1.9] text-white/85 sm:text-4xl">“কিছু মানুষকে আলাদা করে আপন লাগে—কেন লাগে, তার ব্যাখ্যা হয়তো সবসময় দেওয়া যায় না।”</p>
         </div>
       </section>
 
-      <section className="relative z-10 mx-auto max-w-[1180px] px-5 pb-10 pt-20 sm:px-10 sm:pb-16 sm:pt-28">
-        <div className="relative mx-auto max-w-4xl border border-[#bda17a]/60 bg-[#fff9ed]/80 px-7 py-10 shadow-[0_20px_65px_rgba(74,48,33,.09)] sm:px-14 sm:py-14">
-          <div aria-hidden="true" className="pointer-events-none absolute inset-3 border border-[#bda17a]/25" />
-          <div className="relative">
-            <div className="mb-7 flex items-center justify-between gap-4">
-              <span className="font-[var(--font-noto-bengali)] text-xs tracking-[0.16em] text-[#9b7652]">একান্ত ব্যক্তিগত চিঠি</span>
-              <Feather size={21} className="text-[#a47b4f]" />
-            </div>
-            <h2 className="font-[var(--font-noto-bengali)] text-3xl font-black text-[#7d3040] sm:text-4xl">প্রিয় শাহেলা,</h2>
-            <div className="mt-6 space-y-4 font-[var(--font-noto-bengali)] text-base leading-[2.15] text-[#654e40] sm:text-lg">
-              <p>কিছু মানুষ থাকে, যাদের জন্য আলাদা করে সুন্দর কিছু লিখতে ইচ্ছে করে। আজকের এই আয়োজনটুকু তেমনই—কিছু ছবি, কিছু শব্দ, আর তোমার জন্য জমিয়ে রাখা একরাশ শুভকামনা।</p>
-              <p>নতুন বছরের প্রতিটি দিন তোমাকে নতুন কিছু শেখাক, নতুন আনন্দ দিক। মন খারাপের দিনগুলো পেরিয়ে যাক সহজে, আর ভালো লাগার মুহূর্তগুলো দীর্ঘ হোক। নিজের স্বপ্নের কাছে থেকো, নিজের মতো করেই উজ্জ্বল থেকো।</p>
-              <p className="pt-2 text-[#8b3441]">শুভ জন্মদিন। তোমার আগামী দিনগুলো হোক আরও সুন্দর, আরও মায়াময়।</p>
-            </div>
-            <div className="mt-9 flex items-center justify-end gap-3 font-[var(--font-noto-bengali)] text-sm text-[#9b7652]">
-              <span className="h-px w-12 bg-[#bda17a]" /> অনেক শুভকামনায় <Heart size={13} className="text-[#8b3441]" fill="currentColor" />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="moments" className="relative z-10 mx-auto max-w-[1320px] px-5 py-20 sm:px-10 sm:py-28 lg:px-16">
-        <div className="mb-12 flex flex-col justify-between gap-5 md:flex-row md:items-end">
+      <section id="letter" className="relative z-10 mx-auto max-w-[1120px] px-5 py-24 sm:px-10 sm:py-32">
+        <div className="grid gap-12 md:grid-cols-[.7fr_1.3fr] md:gap-20">
           <div>
-            <p className="mb-3 font-[var(--font-noto-bengali)] text-sm tracking-[0.12em] text-[#9b7652]">স্মৃতির অ্যালবাম · ০১—১৭</p>
-            <h2 className="font-[var(--font-noto-bengali)] text-4xl font-black leading-tight tracking-tight text-[#472d2a] sm:text-6xl">কিছু প্রিয় মুহূর্ত,<br /><span className="text-[#9a6b58]">কিছু গল্প হয়ে থাকা দিন।</span></h2>
+            <p className="font-[var(--font-noto-bengali)] text-xs tracking-[.2em] text-[#d9b783]/70">শুধু তোমার জন্য</p>
+            <h2 className="mt-5 font-[var(--font-noto-bengali)] text-4xl font-bold leading-tight text-white sm:text-5xl">কিছু কথা,<br /><span className="text-[#d9b783]">যা বলা হয় না।</span></h2>
+            <div className="mt-7 h-px w-20 bg-[#a77b8d]" />
+            <p className="mt-6 font-[var(--font-noto-bengali)] text-sm leading-8 text-white/40">সব অনুভূতির নাম দিতে হয় না। কিছু অনুভূতি নীরবে সুন্দর থাকুক।</p>
           </div>
-          <p className="max-w-sm font-[var(--font-noto-bengali)] text-sm leading-8 text-[#806b58]">সময় চলে যায়, অথচ কিছু মুহূর্ত ছবির ফ্রেমে থেকে যায়। প্রতিটি ছবিতে ছুঁয়ে দেখো স্মৃতির একেকটি পাতা।</p>
-        </div>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-5 lg:grid-cols-6">
-          {photos.map((photo, index) => (
-            <motion.button key={photo.src} type="button" onClick={() => setActivePhoto(index)} whileHover={{ y: -6, rotate: index % 2 === 0 ? -1 : 1 }} className={`group relative aspect-[4/5] overflow-hidden border border-[#bda17a]/55 bg-[#e7d8c0] text-left shadow-[0_10px_25px_rgba(74,48,33,.12)] ${index === 0 ? "col-span-2 row-span-2" : ""}`} aria-label={`ছবি খুলুন: ${photo.caption}`}>
-              <img src={photo.src} alt={photo.alt} loading="lazy" className={`h-full w-full object-cover transition duration-700 group-hover:scale-105 ${index === 0 ? "object-[72%_center]" : ""}`} />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#251714]/80 via-transparent to-transparent opacity-90 transition group-hover:opacity-100" />
-              <span className="absolute bottom-3 left-3 right-3 font-[var(--font-noto-bengali)] text-sm text-[#fff8ed] sm:bottom-4 sm:left-4">{photo.caption}</span>
-              <span className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-[#fff8ed]/90 text-[#8b3441] opacity-0 transition group-hover:opacity-100"><ArrowUpRight size={15} /></span>
-            </motion.button>
-          ))}
-        </div>
-      </section>
-
-      <section className="relative z-10 px-5 pb-24 sm:px-10">
-        <div className="mx-auto max-w-[1180px] border-y border-[#bda17a]/55 bg-[#fff8e9]/65 px-7 py-10 text-center shadow-[0_18px_55px_rgba(74,48,33,.08)] sm:px-14 sm:py-14">
-          <div className="mb-5 flex justify-center text-[#9b7652]"><BookOpen size={25} /></div>
-          <p className="mb-4 font-[var(--font-noto-bengali)] text-sm tracking-[0.12em] text-[#9b7652]">তোমার জন্য কয়েকটি শুভকামনা</p>
-          <p key={wishIndex} className="mx-auto max-w-3xl font-[var(--font-noto-bengali)] text-2xl font-semibold leading-[1.9] text-[#593a32] sm:text-3xl">“{wishes[wishIndex]}”</p>
-          <button onClick={() => setWishIndex((current) => (current + 1) % wishes.length)} className="mt-8 inline-flex items-center justify-center gap-3 border border-[#8b3441]/35 px-6 py-3 font-[var(--font-noto-bengali)] text-sm text-[#8b3441] transition hover:bg-[#8b3441] hover:text-[#fff8ed]">আরও একটি শুভকামনা <Sparkles size={14} /></button>
+          <div className="relative border-l border-[#d9b783]/35 pl-7 sm:pl-10">
+            <span className="absolute -left-[5px] top-1 h-2.5 w-2.5 rounded-full bg-[#d9b783] shadow-[0_0_20px_rgba(217,183,131,.8)]" />
+            <p className="font-[var(--font-noto-bengali)] text-sm tracking-wide text-[#d9b783]">প্রিয় শাহেলা,</p>
+            <div className="mt-6 space-y-5 font-[var(--font-noto-bengali)] text-base leading-[2.15] text-white/65 sm:text-lg">
+              <p>তোমাকে নিয়ে কী লিখব, সেটা ভাবতে গিয়ে বুঝলাম—কিছু মানুষকে নিয়ে লিখতে বসলে শব্দের চেয়ে অনুভূতিই বেশি হয়ে যায়। তুমি তেমনই একজন।</p>
+              <p>তোমার হাসি, তোমার ছোট ছোট অভ্যাস, তোমার নিজের মতো করে থাকা—এসবের মাঝেই এমন কিছু আছে, যা হয়তো তুমি নিজেও জানো না। কিন্তু কারও কারও দিন একটু ভালো করে দেওয়ার জন্য তোমার শুধু তুমি হয়ে থাকাটাই যথেষ্ট।</p>
+              <p>জন্মদিনে খুব বেশি কিছু চাইব না। শুধু চাই, তুমি নিজের স্বপ্নগুলোকে কখনো ছোট করে দেখো না। মন খারাপ হলে মনে রেখো, এই পৃথিবীতে এমন কেউ আছে যে তোমার ভালো থাকাটাকে সত্যিই গুরুত্বপূর্ণ মনে করে।</p>
+              <p className="pt-2 text-[#e4c99b]">শুভ জন্মদিন, শাহেলা। তোমার জীবনের প্রতিটি নতুন অধ্যায় হোক তোমার কল্পনার চেয়েও সুন্দর।</p>
+            </div>
+            <button onClick={() => setLetterOpen((v) => !v)} className="mt-8 inline-flex items-center gap-3 border border-white/15 px-5 py-3 font-[var(--font-noto-bengali)] text-sm text-white/70 transition hover:border-[#d9b783]/60 hover:text-[#e4c99b]">{letterOpen ? "চিঠির শেষটুকু লুকাও" : "চিঠির শেষটুকু পড়ো"} <Heart size={14} className="text-[#c58d9d]" /></button>
+            <AnimatePresence>{letterOpen && <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 8 }} className="mt-6 border-l-2 border-[#a77b8d] pl-5 font-[var(--font-noto-bengali)] text-lg leading-[2] text-[#e4c99b]">আর একটা কথা—তোমার জীবনে আমার জায়গাটা যাই হোক, তোমার জন্য আমার শুভকামনাটা সবসময়ই সত্যি থাকবে। ভালো থেকো, নিজের মতো করে।</motion.p>}</AnimatePresence>
+            <p className="mt-9 font-[var(--font-noto-bengali)] text-sm text-white/35">— অনেক মায়া আর শুভকামনায়</p>
+          </div>
         </div>
       </section>
 
-      <footer className="relative z-10 border-t border-[#bda17a]/45 bg-[#e9dcc7]/75 px-5 py-16 text-center sm:px-10">
-        <div className="mx-auto max-w-3xl">
-          <div className="mx-auto mb-6 flex h-12 w-12 items-center justify-center rounded-full border border-[#bda17a]/60 bg-[#fff8e9] text-[#8b3441]"><Heart size={19} fill="currentColor" /></div>
-          <p className="font-[var(--font-noto-bengali)] text-4xl font-black leading-tight text-[#593a32] sm:text-6xl">ভালো থেকো,<br /><span className="text-[#8b3441]">প্রিয় শাহেলা।</span></p>
-          <p className="mx-auto mt-5 max-w-md font-[var(--font-noto-bengali)] text-sm leading-8 text-[#806b58]">তোমার দিনগুলো হোক কবিতার মতো মায়াময়, আর আগামী প্রতিটি অধ্যায় ভরে উঠুক অনাবিল আনন্দে।</p>
-          <p className="mt-8 font-[var(--font-noto-bengali)] text-xs tracking-[0.12em] text-[#a18a72]">ভালোবাসা ও শুভকামনায় সাজানো · জন্মদিনের বিশেষ আয়োজন</p>
-          <a href="/" className="mt-6 inline-flex items-center gap-2 font-[var(--font-noto-bengali)] text-sm text-[#806b58] transition hover:text-[#8b3441]">মূল পাতায় ফিরে যাও <ArrowUpRight size={13} /></a>
+      <section id="moments" className="relative z-10 border-y border-white/10 bg-white/[.025] px-5 py-20 sm:px-10 sm:py-28">
+        <div className="mx-auto max-w-[1320px]">
+          <div className="mb-12 flex flex-col justify-between gap-5 md:flex-row md:items-end">
+            <div><p className="font-[var(--font-noto-bengali)] text-xs tracking-[.2em] text-[#d9b783]/70">সময় জমে থাকে ছবিতে</p><h2 className="mt-4 font-[var(--font-noto-bengali)] text-4xl font-bold leading-tight text-white sm:text-6xl">তোমার কিছু<br /><span className="text-[#d9b783]">সুন্দর মুহূর্ত।</span></h2></div>
+            <p className="max-w-sm font-[var(--font-noto-bengali)] text-sm leading-8 text-white/40">প্রতিটি ছবির পেছনে হয়তো আলাদা গল্প আছে। সব গল্প জানা না থাকলেও, মুহূর্তগুলো সুন্দর।</p>
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-5 lg:grid-cols-6">
+            {photos.map((photo, index) => <motion.button key={photo.src} type="button" onClick={() => setActivePhoto(index)} whileHover={{ y: -6, scale: 1.015 }} className={`group relative aspect-[4/5] overflow-hidden border border-white/10 bg-[#171720] text-left ${index === 0 ? "col-span-2 row-span-2" : ""}`} aria-label={`ছবি খুলুন: ${photo.caption}`}>
+              <img src={photo.src} alt={photo.alt} loading="lazy" className={`h-full w-full object-cover transition duration-700 group-hover:scale-110 ${index === 0 ? "object-[72%_center]" : ""}`} />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#08090f]/85 via-transparent to-transparent opacity-80 transition group-hover:opacity-100" />
+              <span className="absolute bottom-3 left-3 right-3 font-[var(--font-noto-bengali)] text-xs text-white/90 sm:bottom-4 sm:left-4 sm:text-sm">{photo.caption}</span>
+              <span className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full border border-white/30 bg-black/30 text-white opacity-0 backdrop-blur transition group-hover:opacity-100"><ArrowUpRight size={14} /></span>
+            </motion.button>)}
+          </div>
         </div>
+      </section>
+
+      <section className="relative z-10 px-5 py-24 sm:py-32">
+        <div className="mx-auto max-w-4xl text-center">
+          <Sparkles className="mx-auto text-[#d9b783]" size={23} />
+          <p className="mt-5 font-[var(--font-noto-bengali)] text-xs tracking-[.2em] text-[#d9b783]/70">তোমার জন্য কিছু প্রার্থনা</p>
+          <p key={wishIndex} className="mt-8 min-h-[120px] font-[var(--font-noto-bengali)] text-xl font-medium leading-[2] text-white/80 sm:text-3xl">“{wishes[wishIndex]}”</p>
+          <button onClick={() => setWishIndex((v) => (v + 1) % wishes.length)} className="mt-8 border border-[#d9b783]/40 px-6 py-3 font-[var(--font-noto-bengali)] text-sm text-[#e4c99b] transition hover:bg-[#d9b783] hover:text-[#111018]">আরেকটি শুভকামনা <ArrowRight size={14} className="ml-2 inline" /></button>
+        </div>
+      </section>
+
+      <section className="relative z-10 overflow-hidden border-t border-white/10 bg-[#11121a] px-5 py-24 text-center sm:py-32">
+        <div className="absolute left-1/2 top-1/2 h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#8c5e73]/10 blur-[100px]" />
+        <div className="relative mx-auto max-w-3xl">
+          <p className="font-[var(--font-noto-bengali)] text-xs tracking-[.22em] text-[#d9b783]/70">আজকের দিনটা তোমার</p>
+          <h2 className="mt-6 font-[var(--font-noto-bengali)] text-4xl font-black leading-[1.5] text-white sm:text-6xl">ভালো থেকো,<br /><span className="text-[#d9b783]">শাহেলা।</span></h2>
+          <p className="mx-auto mt-6 max-w-xl font-[var(--font-noto-bengali)] text-sm leading-8 text-white/45 sm:text-base">সময় বদলাবে, অনেক কিছু বদলাবে—তবু তোমার জন্য আজকের এই শুভকামনাটুকু থেকে যাবে।</p>
+          <button onClick={() => setFinalOpen(true)} className="mt-9 inline-flex items-center gap-3 bg-[#d9b783] px-7 py-4 font-[var(--font-noto-bengali)] text-sm font-semibold text-[#17131a] transition hover:-translate-y-1 hover:bg-[#ecd3a9]">শেষে তোমার জন্য <Heart size={15} fill="currentColor" /></button>
+        </div>
+      </section>
+
+      <footer className="relative z-10 flex flex-col items-center gap-4 border-t border-white/10 px-5 py-8 text-center">
+        <p className="font-[var(--font-noto-bengali)] text-xs text-white/30">২৫ · ১১ · ২০০৮ <span className="mx-2 text-[#d9b783]">✦</span> একটি ছোট্ট আয়োজন, শুধু তোমার জন্য</p>
+        <a href="/" className="font-[var(--font-noto-bengali)] text-xs text-white/35 transition hover:text-[#d9b783]">মূল পাতায় ফিরে যাও <ArrowUpRight size={12} className="ml-1 inline" /></a>
       </footer>
 
       <AnimatePresence>
-        {surpriseOpen && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center bg-[#241815]/80 p-4 backdrop-blur-md" onClick={() => setSurpriseOpen(false)}>
-            <motion.div initial={{ opacity: 0, y: 25, scale: .96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 15, scale: .98 }} role="dialog" aria-modal="true" aria-labelledby="surprise-title" onClick={(event) => event.stopPropagation()} className="relative w-full max-w-xl border border-[#c7ad86] bg-[#fff8e9] p-8 text-[#472d2a] shadow-2xl sm:p-12">
-              <button onClick={() => setSurpriseOpen(false)} aria-label="বন্ধ করুন" className="absolute right-5 top-5 rounded-full border border-[#bda17a]/50 p-2 text-[#806b58] transition hover:bg-[#eadcc6]"><X size={18} /></button>
-              <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full border border-[#bda17a]/60 bg-[#f1e5d1] text-[#8b3441]"><Gift size={25} /></div>
-              <p className="text-center font-[var(--font-noto-bengali)] text-sm tracking-[0.12em] text-[#9b7652]">একটি ছোট্ট উপহার</p>
-              <h2 id="surprise-title" className="mt-3 text-center font-[var(--font-noto-bengali)] text-3xl font-bold text-[#8b3441] sm:text-4xl">প্রিয় শাহেলা,</h2>
-              <p className="mt-6 text-center font-[var(--font-noto-bengali)] text-base leading-[2.1] text-[#5f4a3e] sm:text-lg">শুভ জন্মদিন! তোমার জীবনের প্রতিটি দিন হোক নতুন গল্পের শুরু। অনেক হাসি, সুন্দর মুহূর্ত, প্রিয় মানুষের ভালোবাসা আর স্বপ্নপূরণের আনন্দে ভরে উঠুক তোমার আগামী দিনগুলো। নিজের মতো উজ্জ্বল থেকো—তোমার জন্য রইল অনেক অনেক দোয়া ও শুভকামনা।</p>
-              <p className="mt-6 text-center font-[var(--font-noto-bengali)] text-sm text-[#9b7652]">তোমার জন্য রইল এক আকাশ ভালোবাসা। ♡</p>
-              <div className="mt-8 flex justify-center"><button onClick={() => setSurpriseOpen(false)} className="bg-[#7d3040] px-7 py-3 font-[var(--font-noto-bengali)] text-sm text-[#fff8ed] transition hover:bg-[#632532]">খামটি বন্ধ করো</button></div>
-            </motion.div>
+        {finalOpen && <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[120] flex items-center justify-center bg-[#05060a]/90 p-5 backdrop-blur-xl" onClick={() => setFinalOpen(false)}>
+          <motion.div initial={{ opacity: 0, y: 25, scale: .96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 15 }} onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" className="relative w-full max-w-lg border border-[#d9b783]/30 bg-[#13141d] px-7 py-12 text-center shadow-2xl sm:px-12">
+            <button onClick={() => setFinalOpen(false)} aria-label="বন্ধ করুন" className="absolute right-4 top-4 p-2 text-white/40 hover:text-white"><X size={18} /></button>
+            <Heart className="mx-auto text-[#d9b783]" size={28} />
+            <p className="mt-7 font-[var(--font-noto-bengali)] text-xs tracking-[.2em] text-[#d9b783]/70">একদম শেষের কথাটা</p>
+            <p className="mt-6 font-[var(--font-noto-bengali)] text-2xl font-medium leading-[2] text-white sm:text-3xl">তুমি জানো কি না জানি না, তবে তোমার ভালো থাকাটা কারও কাছে ভীষণ গুরুত্বপূর্ণ।</p>
+            <p className="mt-6 font-[var(--font-noto-bengali)] text-sm text-white/45">শুভ জন্মদিন, শাহেলা। ♡</p>
           </motion.div>
-        )}
-        {activePhoto !== null && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[110] flex items-center justify-center bg-[#211714]/95 p-5 backdrop-blur-md" onClick={() => setActivePhoto(null)}>
-            <button onClick={() => setActivePhoto(null)} aria-label="ছবি বন্ধ করুন" className="absolute right-5 top-5 rounded-full border border-white/25 p-3 text-white/80 transition hover:bg-white/10"><X size={20} /></button>
-            <button onClick={(event) => { event.stopPropagation(); movePhoto(-1); }} aria-label="আগের ছবি" className="absolute left-3 z-10 rounded-full border border-white/25 p-3 text-white transition hover:bg-white/10 sm:left-8"><ArrowLeft size={20} /></button>
-            <div className="flex max-h-[88vh] max-w-[min(80vw,900px)] flex-col items-center gap-4" onClick={(event) => event.stopPropagation()}>
-              <motion.img key={photos[activePhoto].src} initial={{ opacity: 0, scale: .98 }} animate={{ opacity: 1, scale: 1 }} src={photos[activePhoto].src} alt={photos[activePhoto].alt} className="max-h-[78vh] max-w-full rounded-sm border border-[#c7ad86]/50 object-contain shadow-2xl" />
-              <p className="font-[var(--font-noto-bengali)] text-sm text-white/75">{photos[activePhoto].caption} · {String(activePhoto + 1).padStart(2, "0")} / {photos.length}</p>
-            </div>
-            <button onClick={(event) => { event.stopPropagation(); movePhoto(1); }} aria-label="পরের ছবি" className="absolute right-3 z-10 rounded-full border border-white/25 p-3 text-white transition hover:bg-white/10 sm:right-8"><ArrowRight size={20} /></button>
-          </motion.div>
-        )}
+        </motion.div>}
+        {activePhoto !== null && <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[110] flex items-center justify-center bg-[#05060a]/95 p-5 backdrop-blur-xl" onClick={() => setActivePhoto(null)}>
+          <button onClick={() => setActivePhoto(null)} aria-label="ছবি বন্ধ করুন" className="absolute right-5 top-5 rounded-full border border-white/20 p-3 text-white/80"><X size={20} /></button>
+          <button onClick={(e) => { e.stopPropagation(); movePhoto(-1); }} aria-label="আগের ছবি" className="absolute left-3 z-10 rounded-full border border-white/20 p-3 text-white sm:left-8"><ArrowLeft size={20} /></button>
+          <div className="flex max-h-[88vh] max-w-[min(80vw,900px)] flex-col items-center gap-4" onClick={(e) => e.stopPropagation()}>
+            <motion.img key={photos[activePhoto].src} initial={{ opacity: 0, scale: .98 }} animate={{ opacity: 1, scale: 1 }} src={photos[activePhoto].src} alt={photos[activePhoto].alt} className="max-h-[78vh] max-w-full object-contain shadow-2xl" />
+            <p className="font-[var(--font-noto-bengali)] text-sm text-white/65">{photos[activePhoto].caption} · {String(activePhoto + 1).padStart(2, "0")} / {photos.length}</p>
+          </div>
+          <button onClick={(e) => { e.stopPropagation(); movePhoto(1); }} aria-label="পরের ছবি" className="absolute right-3 z-10 rounded-full border border-white/20 p-3 text-white sm:right-8"><ArrowRight size={20} /></button>
+        </motion.div>}
       </AnimatePresence>
     </main>
   );
