@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, Heart, Moon,
   Sparkles, X,
@@ -34,6 +34,8 @@ const stars = Array.from({ length: 24 }, (_, i) => ({
 }));
 
 export default function BirthdayPage() {
+  const reduceMotion = useReducedMotion();
+  const touchStartX = useRef<number | null>(null);
   const [activePhoto, setActivePhoto] = useState<number | null>(null);
   const [letterOpen, setLetterOpen] = useState(false);
   const [wishIndex, setWishIndex] = useState(0);
@@ -41,6 +43,8 @@ export default function BirthdayPage() {
 
   useEffect(() => {
     if (activePhoto === null && !finalOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setActivePhoto(null);
@@ -50,7 +54,10 @@ export default function BirthdayPage() {
       if (activePhoto !== null && event.key === "ArrowLeft") setActivePhoto((v) => v === null ? null : (v - 1 + photos.length) % photos.length);
     };
     window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = previousOverflow;
+    };
   }, [activePhoto, finalOpen]);
 
   const movePhoto = (direction: number) => setActivePhoto((v) => v === null ? null : (v + direction + photos.length) % photos.length);
@@ -60,7 +67,7 @@ export default function BirthdayPage() {
       <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(109,77,92,.24),transparent_48%),radial-gradient(ellipse_at_90%_70%,rgba(135,101,58,.13),transparent_35%)]" />
         <div className="absolute inset-0 opacity-[0.12]" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px)", backgroundSize: "72px 72px" }} />
-        {stars.map((star, i) => <motion.span key={i} className="absolute rounded-full bg-[#e7c997]" style={{ left: star.left, top: star.top, width: star.size, height: star.size, boxShadow: "0 0 12px rgba(231,201,151,.7)" }} animate={{ opacity: [.15, .85, .15], scale: [1, 1.5, 1] }} transition={{ duration: 3 + star.delay, delay: star.delay, repeat: Infinity }} />)}
+        {!reduceMotion && stars.map((star, i) => <motion.span key={i} className="absolute rounded-full bg-[#e7c997]" style={{ left: star.left, top: star.top, width: star.size, height: star.size, boxShadow: "0 0 12px rgba(231,201,151,.7)" }} animate={{ opacity: [.15, .85, .15], scale: [1, 1.5, 1] }} transition={{ duration: 3 + star.delay, delay: star.delay, repeat: Infinity }} />)}
         <div className="absolute -left-48 top-[30%] h-[32rem] w-[32rem] rounded-full bg-[#6c3f56]/10 blur-[120px]" />
         <div className="absolute -right-48 top-[58%] h-[32rem] w-[32rem] rounded-full bg-[#9c7848]/10 blur-[130px]" />
       </div>
@@ -72,7 +79,7 @@ export default function BirthdayPage() {
       </header>
 
       <section className="relative z-10 mx-auto grid min-h-[calc(100svh-84px)] max-w-[1400px] items-center gap-12 px-5 pb-20 pt-8 sm:px-10 md:grid-cols-[1fr_.88fr] md:gap-16 md:px-16 md:py-12">
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }} className="order-2 md:order-1">
+        <motion.div initial={reduceMotion ? false : { opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reduceMotion ? 0 : 1 }} className="order-2 md:order-1">
           <div className="mb-8 flex items-center gap-3 font-[var(--font-noto-bengali)] text-xs tracking-[.18em] text-[#d6b47e]"><span className="h-px w-9 bg-[#d6b47e]/70" /> একটি দিন, একজন মানুষ, অনেক অনুভূতি</div>
           <p className="mb-4 font-[var(--font-noto-bengali)] text-sm text-white/45">২৫ নভেম্বর · তোমার দিন</p>
           <h1 className="font-[var(--font-noto-bengali)] font-black leading-[1.13] tracking-tight">
@@ -97,7 +104,7 @@ export default function BirthdayPage() {
           <div className="mt-12 flex items-center gap-3 text-white/30"><Moon size={14} /><span className="font-[var(--font-noto-bengali)] text-xs tracking-wide">এই আয়োজনটুকু শুধু তোমার জন্য</span></div>
         </motion.div>
 
-        <motion.div initial={{ opacity: 0, scale: .94, rotate: 1.5 }} animate={{ opacity: 1, scale: 1, rotate: 0 }} transition={{ duration: 1.1, delay: .15 }} className="relative order-1 mx-auto w-full max-w-[500px] md:order-2">
+        <motion.div initial={reduceMotion ? false : { opacity: 0, scale: .94, rotate: 1.5 }} animate={{ opacity: 1, scale: 1, rotate: 0 }} transition={{ duration: reduceMotion ? 0 : 1.1, delay: reduceMotion ? 0 : .15 }} className="relative order-1 mx-auto w-full max-w-[500px] md:order-2">
           <div className="absolute -inset-6 rounded-[48%] bg-[#b68b72]/10 blur-[70px]" />
           <div className="absolute -left-5 top-[16%] z-20 hidden h-24 w-24 items-center justify-center rounded-full border border-[#d9b783]/30 bg-[#11131b]/80 text-center font-[var(--font-noto-bengali)] text-xs leading-6 text-[#d9b783] backdrop-blur sm:flex">একটি<br />বিশেষ<br />দিন</div>
           <div className="relative overflow-hidden border border-white/15 bg-[#171720] p-2 shadow-[0_35px_100px_rgba(0,0,0,.55)] sm:p-3">
@@ -111,7 +118,7 @@ export default function BirthdayPage() {
               </div>
             </div>
           </div>
-          <motion.div animate={{ y: [0, -10, 0], rotate: [0, 8, 0] }} transition={{ duration: 6, repeat: Infinity }} className="absolute -bottom-7 -right-4 flex h-16 w-16 items-center justify-center rounded-full border border-[#d9b783]/35 bg-[#11131b] text-[#d9b783] shadow-xl"><Sparkles size={24} /></motion.div>
+          <motion.div animate={reduceMotion ? undefined : { y: [0, -10, 0], rotate: [0, 8, 0] }} transition={{ duration: 6, repeat: Infinity }} className="absolute -bottom-7 -right-4 flex h-16 w-16 items-center justify-center rounded-full border border-[#d9b783]/35 bg-[#11131b] text-[#d9b783] shadow-xl"><Sparkles size={24} /></motion.div>
         </motion.div>
       </section>
 
@@ -153,8 +160,8 @@ export default function BirthdayPage() {
             <p className="max-w-sm font-[var(--font-noto-bengali)] text-sm leading-8 text-white/40">প্রতিটি ছবির পেছনে হয়তো আলাদা গল্প আছে। সব গল্প জানা না থাকলেও, মুহূর্তগুলো সুন্দর।</p>
           </div>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-5 lg:grid-cols-6">
-            {photos.map((photo, index) => <motion.button key={photo.src} type="button" onClick={() => setActivePhoto(index)} whileHover={{ y: -6, scale: 1.015 }} className={`group relative aspect-[4/5] overflow-hidden border border-white/10 bg-[#171720] text-left ${index === 0 ? "col-span-2 row-span-2" : ""}`} aria-label={`ছবি খুলুন: ${photo.caption}`}>
-              <img src={photo.src} alt={photo.alt} loading="lazy" className={`h-full w-full object-cover transition duration-700 group-hover:scale-110 ${index === 0 ? "object-[72%_center]" : ""}`} />
+            {photos.map((photo, index) => <motion.button key={photo.src} type="button" onClick={() => setActivePhoto(index)} whileHover={reduceMotion ? undefined : { y: -6, scale: 1.015 }} className={`group relative aspect-[4/5] overflow-hidden border border-white/10 bg-[#171720] text-left ${index === 0 ? "col-span-2 row-span-2" : ""}`} aria-label={`ছবি খুলুন: ${photo.caption}`}>
+              <img src={photo.src} alt={photo.alt} loading="lazy" decoding="async" draggable={false} className={`h-full w-full object-cover transition duration-700 group-hover:scale-110 ${index === 0 ? "object-[72%_center]" : ""}`} />
               <div className="absolute inset-0 bg-gradient-to-t from-[#08090f]/85 via-transparent to-transparent opacity-80 transition group-hover:opacity-100" />
               <span className="absolute bottom-3 left-3 right-3 font-[var(--font-noto-bengali)] text-xs text-white/90 sm:bottom-4 sm:left-4 sm:text-sm">{photo.caption}</span>
               <span className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full border border-white/30 bg-black/30 text-white opacity-0 backdrop-blur transition group-hover:opacity-100"><ArrowUpRight size={14} /></span>
@@ -167,7 +174,7 @@ export default function BirthdayPage() {
         <div className="mx-auto max-w-4xl text-center">
           <Sparkles className="mx-auto text-[#d9b783]" size={23} />
           <p className="mt-5 font-[var(--font-noto-bengali)] text-xs tracking-[.2em] text-[#d9b783]/70">তোমার জন্য কিছু প্রার্থনা</p>
-          <p key={wishIndex} className="mt-8 min-h-[120px] font-[var(--font-noto-bengali)] text-xl font-medium leading-[2] text-white/80 sm:text-3xl">“{wishes[wishIndex]}”</p>
+          <AnimatePresence mode="wait" initial={false}><motion.p key={wishIndex} initial={reduceMotion ? false : { opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={reduceMotion ? undefined : { opacity: 0, y: -8 }} transition={{ duration: reduceMotion ? 0 : .35 }} className="mt-8 min-h-[120px] font-[var(--font-noto-bengali)] text-xl font-medium leading-[2] text-white/80 sm:text-3xl">“{wishes[wishIndex]}”</motion.p></AnimatePresence>
           <button onClick={() => setWishIndex((v) => (v + 1) % wishes.length)} className="mt-8 border border-[#d9b783]/40 px-6 py-3 font-[var(--font-noto-bengali)] text-sm text-[#e4c99b] transition hover:bg-[#d9b783] hover:text-[#111018]">আরেকটি শুভকামনা <ArrowRight size={14} className="ml-2 inline" /></button>
         </div>
       </section>
@@ -189,7 +196,7 @@ export default function BirthdayPage() {
 
       <AnimatePresence>
         {finalOpen && <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[120] flex items-center justify-center bg-[#05060a]/90 p-5 backdrop-blur-xl" onClick={() => setFinalOpen(false)}>
-          <motion.div initial={{ opacity: 0, y: 25, scale: .96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 15 }} onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" className="relative w-full max-w-lg border border-[#d9b783]/30 bg-[#13141d] px-7 py-12 text-center shadow-2xl sm:px-12">
+          <motion.div initial={{ opacity: 0, y: 25, scale: .96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 15 }} onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label="শাহেলার জন্য শেষ শুভেচ্ছা" className="relative w-full max-w-lg border border-[#d9b783]/30 bg-[#13141d] px-7 py-12 text-center shadow-2xl sm:px-12">
             <button onClick={() => setFinalOpen(false)} aria-label="বন্ধ করুন" className="absolute right-4 top-4 p-2 text-white/40 hover:text-white"><X size={18} /></button>
             <Heart className="mx-auto text-[#d9b783]" size={28} />
             <p className="mt-7 font-[var(--font-noto-bengali)] text-xs tracking-[.2em] text-[#d9b783]/70">একদম শেষের কথাটা</p>
@@ -200,8 +207,8 @@ export default function BirthdayPage() {
         {activePhoto !== null && <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[110] flex items-center justify-center bg-[#05060a]/95 p-5 backdrop-blur-xl" onClick={() => setActivePhoto(null)}>
           <button onClick={() => setActivePhoto(null)} aria-label="ছবি বন্ধ করুন" className="absolute right-5 top-5 rounded-full border border-white/20 p-3 text-white/80"><X size={20} /></button>
           <button onClick={(e) => { e.stopPropagation(); movePhoto(-1); }} aria-label="আগের ছবি" className="absolute left-3 z-10 rounded-full border border-white/20 p-3 text-white sm:left-8"><ArrowLeft size={20} /></button>
-          <div className="flex max-h-[88vh] max-w-[min(80vw,900px)] flex-col items-center gap-4" onClick={(e) => e.stopPropagation()}>
-            <motion.img key={photos[activePhoto].src} initial={{ opacity: 0, scale: .98 }} animate={{ opacity: 1, scale: 1 }} src={photos[activePhoto].src} alt={photos[activePhoto].alt} className="max-h-[78vh] max-w-full object-contain shadow-2xl" />
+          <div className="flex max-h-[88vh] max-w-[min(80vw,900px)] touch-pan-y flex-col items-center gap-4" onClick={(e) => e.stopPropagation()} onTouchStart={(e) => { touchStartX.current = e.touches[0]?.clientX ?? null; }} onTouchEnd={(e) => { const start = touchStartX.current; const end = e.changedTouches[0]?.clientX; touchStartX.current = null; if (start === null || end === undefined || Math.abs(end - start) < 45) return; movePhoto(end < start ? 1 : -1); }}>
+            <motion.img key={photos[activePhoto].src} initial={{ opacity: 0, scale: .98 }} animate={{ opacity: 1, scale: 1 }} src={photos[activePhoto].src} alt={photos[activePhoto].alt} draggable={false} className="max-h-[78vh] max-w-full select-none object-contain shadow-2xl" />
             <p className="font-[var(--font-noto-bengali)] text-sm text-white/65">{photos[activePhoto].caption} · {String(activePhoto + 1).padStart(2, "0")} / {photos.length}</p>
           </div>
           <button onClick={(e) => { e.stopPropagation(); movePhoto(1); }} aria-label="পরের ছবি" className="absolute right-3 z-10 rounded-full border border-white/20 p-3 text-white sm:right-8"><ArrowRight size={20} /></button>
