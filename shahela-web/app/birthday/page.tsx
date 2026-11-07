@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, Heart, Moon,
-  Sparkles, X, Volume2, VolumeX,
+  Sparkles, X,
 } from "lucide-react";
 
 const photos = [
