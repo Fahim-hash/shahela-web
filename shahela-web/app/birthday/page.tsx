@@ -105,7 +105,7 @@ export default function BirthdayPage() {
               <span className="text-xs">শুভ</span><span className="text-3xl font-bold leading-none">২৫</span><span className="text-xs">নভেম্বর</span>
             </div>
             <div className="relative aspect-[4/5] overflow-hidden bg-[#e7d8c0]">
-              <img src="/images/shahela1.jpg" alt="শাহেলা" fetchPriority="high" className="h-full w-full object-cover" />
+              <img src="/images/shahela1.jpg" alt="শাহেলা" fetchPriority="high" className="h-full w-full object-cover object-[72%_center]" />
               <div className="absolute inset-0 bg-gradient-to-t from-[#251714]/75 via-transparent to-transparent" />
               <div className="absolute bottom-6 left-6 right-6 text-[#fff8ed] sm:bottom-8 sm:left-8">
                 <p className="font-['Noto_Serif_Bengali'] text-sm text-white/80">এই সংখ্যার উৎসর্গ</p>
