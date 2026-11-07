@@ -136,7 +136,7 @@ export default function BirthdayPage() {
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-5 lg:grid-cols-6">
           {photos.map((photo, index) => (
             <motion.button key={photo.src} type="button" onClick={() => setActivePhoto(index)} whileHover={{ y: -6, rotate: index % 2 === 0 ? -1 : 1 }} className={`group relative aspect-[4/5] overflow-hidden border border-[#bda17a]/55 bg-[#e7d8c0] text-left shadow-[0_10px_25px_rgba(74,48,33,.12)] ${index === 0 ? "col-span-2 row-span-2" : ""}`} aria-label={`ছবি খুলুন: ${photo.caption}`}>
-              <img src={photo.src} alt={photo.alt} loading="lazy" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+              <img src={photo.src} alt={photo.alt} loading="lazy" className={`h-full w-full object-cover transition duration-700 group-hover:scale-105 ${index === 0 ? "object-[72%_center]" : ""}`} />
               <div className="absolute inset-0 bg-gradient-to-t from-[#251714]/80 via-transparent to-transparent opacity-90 transition group-hover:opacity-100" />
               <span className="absolute bottom-3 left-3 right-3 font-['Noto_Serif_Bengali'] text-sm text-[#fff8ed] sm:bottom-4 sm:left-4">{photo.caption}</span>
               <span className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-[#fff8ed]/90 text-[#8b3441] opacity-0 transition group-hover:opacity-100"><ArrowUpRight size={15} /></span>
