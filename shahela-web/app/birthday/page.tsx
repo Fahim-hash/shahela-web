@@ -28,6 +28,7 @@ const wishes = [
 ];
 
 export default function BirthdayPage() {
+  const [introOpen, setIntroOpen] = useState(true);
   const [surpriseOpen, setSurpriseOpen] = useState(false);
   const [activePhoto, setActivePhoto] = useState<number | null>(null);
   const [wishIndex, setWishIndex] = useState(0);
@@ -62,6 +63,58 @@ export default function BirthdayPage() {
         <div className="absolute -left-40 top-24 h-96 w-96 rounded-full bg-[#b77b68]/15 blur-[100px]" />
         <div className="absolute -right-40 bottom-10 h-96 w-96 rounded-full bg-[#c4a36a]/20 blur-[110px]" />
       </div>
+
+      <AnimatePresence>
+        {introOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.65 }}
+            className="fixed inset-0 z-[150] flex items-center justify-center overflow-hidden bg-[#eadcc5] px-5 py-10"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="intro-title"
+          >
+            <div aria-hidden="true" className="pointer-events-none absolute inset-4 border border-[#9b7652]/35 sm:inset-8" />
+            <div aria-hidden="true" className="pointer-events-none absolute inset-7 border border-[#9b7652]/15 sm:inset-12" />
+            <div aria-hidden="true" className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-[#b77b68]/20 blur-[90px]" />
+            <div aria-hidden="true" className="pointer-events-none absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-[#c4a36a]/25 blur-[90px]" />
+            <motion.div
+              initial={{ y: 24, scale: .96, opacity: 0 }}
+              animate={{ y: 0, scale: 1, opacity: 1 }}
+              transition={{ duration: .8, ease: "easeOut" }}
+              className="relative w-full max-w-[560px] text-center"
+            >
+              <p className="font-['Noto_Serif_Bengali'] text-xs tracking-[0.28em] text-[#9b7652]">একটি বিশেষ নিবেদন</p>
+              <div className="relative mx-auto mt-9 flex aspect-[1.28/1] w-full max-w-[390px] items-center justify-center">
+                <div className="absolute inset-x-3 bottom-2 top-8 rotate-[-3deg] border border-[#bda17a]/70 bg-[#f8eedc] shadow-[0_25px_55px_rgba(74,48,33,.17)]" />
+                <div className="absolute inset-x-0 bottom-0 top-4 overflow-hidden border border-[#bda17a] bg-[#fff8e9] shadow-[0_20px_50px_rgba(74,48,33,.14)]">
+                  <div className="absolute inset-x-0 top-0 h-1/2 origin-top bg-[#ead8bb]" style={{ clipPath: "polygon(0 0, 100% 0, 50% 100%)" }} />
+                  <div className="absolute inset-x-0 bottom-0 h-[58%] bg-[#f4e6cf]" style={{ clipPath: "polygon(0 100%, 50% 25%, 100% 100%)" }} />
+                  <div className="absolute inset-0 flex flex-col items-center justify-center pt-4">
+                    <span className="font-['Noto_Serif_Bengali'] text-sm text-[#9b7652]">প্রাপক</span>
+                    <span className="mt-1 font-['Noto_Serif_Bengali'] text-4xl font-black text-[#7d3040] sm:text-5xl">শাহেলা</span>
+                    <span className="mt-2 font-['Noto_Serif_Bengali'] text-xs text-[#92775b]">তোমার জন্য, অনেক যত্নে</span>
+                  </div>
+                  <div className="absolute bottom-[20%] left-1/2 z-10 flex h-12 w-12 -translate-x-1/2 items-center justify-center rounded-full border-2 border-[#f4e6cf] bg-[#8b3441] text-[#fff8ed] shadow-md">
+                    <Heart size={18} fill="currentColor" />
+                  </div>
+                </div>
+              </div>
+              <h1 id="intro-title" className="mt-8 font-['Noto_Serif_Bengali'] text-3xl font-black text-[#593a32] sm:text-4xl">তোমার জন্য কিছু কথা…</h1>
+              <p className="mx-auto mt-3 max-w-sm font-['Noto_Serif_Bengali'] text-sm leading-8 text-[#806b58]">কিছু স্মৃতি, কিছু শব্দ আর একরাশ শুভকামনা—সবটুকু শুধু তোমাকে ঘিরে।</p>
+              <button
+                onClick={() => setIntroOpen(false)}
+                className="mt-7 inline-flex items-center gap-3 border border-[#6e2938] bg-[#7d3040] px-8 py-4 font-['Noto_Serif_Bengali'] text-sm text-[#fff8ed] shadow-[0_12px_35px_rgba(91,42,48,.18)] transition duration-300 hover:-translate-y-1 hover:bg-[#632532]"
+              >
+                <BookOpen size={16} /> চিঠিটি খোলো <ArrowUpRight size={14} />
+              </button>
+              <p className="mt-5 font-['Noto_Serif_Bengali'] text-[11px] tracking-[0.15em] text-[#a18a72]">২৫ নভেম্বর · জন্মদিনের বিশেষ আয়োজন</p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <header className="relative z-10 mx-auto flex max-w-[1320px] items-center justify-between px-5 py-6 sm:px-10 lg:px-16">
         <a href="/" className="font-['Noto_Serif_Bengali'] text-lg font-bold tracking-tight text-[#6e2938]">শাহেলার জন্য <span className="text-[#a47b4f]">✦</span></a>
@@ -122,6 +175,27 @@ export default function BirthdayPage() {
         <div className="mx-auto flex max-w-[1180px] flex-col items-center justify-between gap-3 text-center sm:flex-row sm:text-left">
           <p className="font-['Noto_Serif_Bengali'] text-2xl font-bold tracking-tight text-[#593a32] sm:text-3xl">জীবন হোক <span className="text-[#8b3441]">সুন্দর গল্পের মতো।</span></p>
           <span className="font-['Noto_Serif_Bengali'] text-sm text-[#92775b]">নতুন বছরের প্রথম পাতা · আজ থেকে</span>
+        </div>
+      </section>
+
+      <section className="relative z-10 mx-auto max-w-[1180px] px-5 pb-10 pt-20 sm:px-10 sm:pb-16 sm:pt-28">
+        <div className="relative mx-auto max-w-4xl border border-[#bda17a]/60 bg-[#fff9ed]/80 px-7 py-10 shadow-[0_20px_65px_rgba(74,48,33,.09)] sm:px-14 sm:py-14">
+          <div aria-hidden="true" className="pointer-events-none absolute inset-3 border border-[#bda17a]/25" />
+          <div className="relative">
+            <div className="mb-7 flex items-center justify-between gap-4">
+              <span className="font-['Noto_Serif_Bengali'] text-xs tracking-[0.16em] text-[#9b7652]">একান্ত ব্যক্তিগত চিঠি</span>
+              <Feather size={21} className="text-[#a47b4f]" />
+            </div>
+            <h2 className="font-['Noto_Serif_Bengali'] text-3xl font-black text-[#7d3040] sm:text-4xl">প্রিয় শাহেলা,</h2>
+            <div className="mt-6 space-y-4 font-['Noto_Serif_Bengali'] text-base leading-[2.15] text-[#654e40] sm:text-lg">
+              <p>কিছু মানুষ থাকে, যাদের জন্য আলাদা করে সুন্দর কিছু লিখতে ইচ্ছে করে। আজকের এই আয়োজনটুকু তেমনই—কিছু ছবি, কিছু শব্দ, আর তোমার জন্য জমিয়ে রাখা একরাশ শুভকামনা।</p>
+              <p>নতুন বছরের প্রতিটি দিন তোমাকে নতুন কিছু শেখাক, নতুন আনন্দ দিক। মন খারাপের দিনগুলো পেরিয়ে যাক সহজে, আর ভালো লাগার মুহূর্তগুলো দীর্ঘ হোক। নিজের স্বপ্নের কাছে থেকো, নিজের মতো করেই উজ্জ্বল থেকো।</p>
+              <p className="pt-2 text-[#8b3441]">শুভ জন্মদিন। তোমার আগামী দিনগুলো হোক আরও সুন্দর, আরও মায়াময়।</p>
+            </div>
+            <div className="mt-9 flex items-center justify-end gap-3 font-['Noto_Serif_Bengali'] text-sm text-[#9b7652]">
+              <span className="h-px w-12 bg-[#bda17a]" /> অনেক শুভকামনায় <Heart size={13} className="text-[#8b3441]" fill="currentColor" />
+            </div>
+          </div>
         </div>
       </section>
 
